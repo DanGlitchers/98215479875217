@@ -1,3090 +1,526 @@
 
-html_content = '''<!DOCTYPE html>
+html_compact = '''<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Master - אתר תרגול אנגלית מטורף</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #ec4899;
-            --accent: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --dark: #1e1b4b;
-            --light: #f8fafc;
-            --card-bg: #ffffff;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --shadow: 0 10px 40px rgba(0,0,0,0.15);
-            --shadow-hover: 0 20px 60px rgba(0,0,0,0.2);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Heebo', sans-serif;
-            background: var(--light);
-            color: var(--dark);
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* Animated Background */
-        .bg-animation {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .floating-shapes {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.1;
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .shape:nth-child(1) { width: 80px; height: 80px; background: #fff; top: 10%; left: 10%; animation-delay: 0s; }
-        .shape:nth-child(2) { width: 120px; height: 120px; background: #fff; top: 60%; left: 80%; animation-delay: 2s; }
-        .shape:nth-child(3) { width: 60px; height: 60px; background: #fff; top: 40%; left: 40%; animation-delay: 4s; }
-        .shape:nth-child(4) { width: 100px; height: 100px; background: #fff; top: 80%; left: 20%; animation-delay: 6s; }
-        .shape:nth-child(5) { width: 70px; height: 70px; background: #fff; top: 20%; left: 70%; animation-delay: 8s; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            33% { transform: translateY(-30px) rotate(120deg); }
-            66% { transform: translateY(30px) rotate(240deg); }
-        }
-
-        /* Header */
-        header {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo-icon {
-            font-size: 2.2rem;
-            -webkit-text-fill-color: var(--primary);
-        }
-
-        .stats-bar {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 0.5rem 1rem;
-            background: var(--light);
-            border-radius: 12px;
-            min-width: 80px;
-        }
-
-        .stat-value {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        .streak {
-            background: var(--gradient-2);
-            color: white;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Navigation */
-        nav {
-            background: rgba(255,255,255,0.9);
-            padding: 0.5rem 2rem;
-            position: sticky;
-            top: 70px;
-            z-index: 999;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .nav-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            gap: 0.5rem;
-            overflow-x: auto;
-            padding: 0.5rem 0;
-        }
-
-        .nav-btn {
-            padding: 0.7rem 1.5rem;
-            border: none;
-            background: transparent;
-            color: #64748b;
-            font-family: 'Heebo', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .nav-btn:hover {
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
-        }
-
-        .nav-btn.active {
-            background: var(--gradient-1);
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* Section */
-        .section {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: white;
-        }
-
-        .hero h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto 2rem;
-        }
-
-        /* Cards Grid */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            transition: all 0.4s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 5px;
-            background: var(--gradient-1);
-        }
-
-        .card:nth-child(2)::before { background: var(--gradient-2); }
-        .card:nth-child(3)::before { background: var(--gradient-3); }
-        .card:nth-child(4)::before { background: var(--gradient-4); }
-        .card:nth-child(5)::before { background: var(--gradient-1); }
-        .card:nth-child(6)::before { background: var(--gradient-2); }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .card h3 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
-
-        .card p {
-            color: #64748b;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .card-progress {
-            margin-top: 1rem;
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .card-progress-bar {
-            height: 100%;
-            background: var(--gradient-1);
-            border-radius: 10px;
-            transition: width 0.5s ease;
-            width: 0%;
-        }
-
-        /* Flashcards */
-        .flashcard-container {
-            perspective: 1000px;
-            max-width: 500px;
-            margin: 2rem auto;
-        }
-
-        .flashcard {
-            width: 100%;
-            height: 300px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s;
-            cursor: pointer;
-        }
-
-        .flashcard.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .flashcard-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .flashcard-front {
-            background: var(--gradient-1);
-            color: white;
-        }
-
-        .flashcard-back {
-            background: var(--gradient-2);
-            color: white;
-            transform: rotateY(180deg);
-        }
-
-        .flashcard-word {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .flashcard-hint {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .flashcard-controls {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 16px;
-            font-family: 'Heebo', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: var(--gradient-1);
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-
-        .btn-success {
-            background: var(--gradient-4);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        /* Quiz */
-        .quiz-container {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: var(--shadow);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .quiz-question {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-
-        .quiz-question .blank {
-            display: inline-block;
-            min-width: 120px;
-            border-bottom: 3px dashed var(--primary);
-            margin: 0 5px;
-            text-align: center;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .quiz-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .quiz-option {
-            padding: 1.2rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            text-align: center;
-            background: white;
-        }
-
-        .quiz-option:hover {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.05);
-        }
-
-        .quiz-option.correct {
-            border-color: var(--success);
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-        }
-
-        .quiz-option.wrong {
-            border-color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-        }
-
-        .quiz-option.disabled {
-            pointer-events: none;
-            opacity: 0.6;
-        }
-
-        .quiz-feedback {
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            display: none;
-            font-weight: 600;
-        }
-
-        .quiz-feedback.show {
-            display: block;
-        }
-
-        .quiz-feedback.correct {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-            border: 1px solid var(--success);
-        }
-
-        .quiz-feedback.wrong {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
-
-        .quiz-progress {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .quiz-progress-bar {
-            flex: 1;
-            height: 10px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            margin: 0 1rem;
-            overflow: hidden;
-        }
-
-        .quiz-progress-fill {
-            height: 100%;
-            background: var(--gradient-1);
-            border-radius: 10px;
-            transition: width 0.5s ease;
-            width: 0%;
-        }
-
-        /* Passive Voice Exercise */
-        .exercise-box {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 1.5rem;
-            border-right: 5px solid var(--primary);
-        }
-
-        .exercise-box.active-voice {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-right-color: var(--accent);
-        }
-
-        .exercise-box.passive-voice {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            border-right-color: var(--primary);
-        }
-
-        .exercise-label {
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-            opacity: 0.7;
-        }
-
-        .exercise-text {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .exercise-input {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            font-family: 'Heebo', sans-serif;
-            font-size: 1.1rem;
-            margin-top: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .exercise-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-        }
-
-        .exercise-input.correct {
-            border-color: var(--success);
-            background: rgba(16, 185, 129, 0.05);
-        }
-
-        .exercise-input.wrong {
-            border-color: var(--danger);
-            background: rgba(239, 68, 68, 0.05);
-        }
-
-        /* Writing Section */
-        .writing-prompt {
-            background: var(--gradient-3);
-            color: white;
-            padding: 2rem;
-            border-radius: 24px;
-            margin-bottom: 1.5rem;
-        }
-
-        .writing-prompt h3 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .writing-prompt ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .writing-prompt li {
-            padding: 0.5rem 0;
-            padding-right: 1.5rem;
-            position: relative;
-        }
-
-        .writing-prompt li::before {
-            content: '✓';
-            position: absolute;
-            right: 0;
-            font-weight: 700;
-        }
-
-        .writing-textarea {
-            width: 100%;
-            min-height: 300px;
-            padding: 1.5rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 20px;
-            font-family: 'Heebo', sans-serif;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            resize: vertical;
-            transition: all 0.3s ease;
-        }
-
-        .writing-textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-        }
-
-        .writing-timer {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .timer-display {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2rem;
-            background: var(--dark);
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 12px;
-            min-width: 120px;
-            text-align: center;
-        }
-
-        /* Unseen Reading */
-        .reading-text {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: var(--shadow);
-            line-height: 2;
-            font-size: 1.15rem;
-            margin-bottom: 2rem;
-            border-right: 5px solid var(--secondary);
-        }
-
-        .reading-text p {
-            margin-bottom: 1rem;
-        }
-
-        .reading-questions {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .question-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-        }
-
-        .question-text {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-
-        .question-answers {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .answer-option {
-            padding: 0.8rem 1.2rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .answer-option:hover {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.05);
-        }
-
-        .answer-option.selected {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
-        }
-
-        .answer-option.correct {
-            border-color: var(--success);
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .answer-option.wrong {
-            border-color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .answer-letter {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-
-        .answer-option.selected .answer-letter,
-        .answer-option.correct .answer-letter {
-            background: var(--primary);
-            color: white;
-        }
-
-        .answer-option.correct .answer-letter {
-            background: var(--success);
-        }
-
-        /* Vocabulary List */
-        .vocab-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1rem;
-        }
-
-        .vocab-item {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 1.2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .vocab-item:hover {
-            transform: translateX(-5px);
-            box-shadow: var(--shadow);
-        }
-
-        .vocab-number {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: var(--gradient-1);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-family: 'Poppins', sans-serif;
-            flex-shrink: 0;
-        }
-
-        .vocab-content {
-            flex: 1;
-        }
-
-        .vocab-word {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--dark);
-        }
-
-        .vocab-meaning {
-            font-size: 0.9rem;
-            color: #64748b;
-        }
-
-        .vocab-sentence {
-            font-size: 0.85rem;
-            color: var(--primary);
-            margin-top: 0.3rem;
-            font-style: italic;
-        }
-
-        /* Progress Dashboard */
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .dashboard-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
-
-        .dashboard-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .dashboard-value {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .dashboard-label {
-            color: #64748b;
-            font-size: 0.95rem;
-            margin-top: 0.5rem;
-        }
-
-        /* Daily Challenge */
-        .daily-challenge {
-            background: var(--gradient-2);
-            color: white;
-            border-radius: 24px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .daily-challenge::before {
-            content: '';
-            position: absolute;
-            top: -50%; right: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .daily-challenge-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .daily-challenge h2 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .daily-challenge p {
-            opacity: 0.9;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Section Title */
-        .section-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.2rem;
-            color: white;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .section-subtitle {
-            color: rgba(255,255,255,0.85);
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
-
-        /* Grammar Tense Cards */
-        .tense-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .tense-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            transition: all 0.4s ease;
-        }
-
-        .tense-card:hover {
-            transform: scale(1.03);
-        }
-
-        .tense-card h3 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.4rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .tense-formula {
-            background: var(--light);
-            padding: 1rem;
-            border-radius: 12px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 1rem;
-            text-align: center;
-            border: 2px dashed var(--primary);
-        }
-
-        .tense-examples {
-            list-style: none;
-            padding: 0;
-        }
-
-        .tense-examples li {
-            padding: 0.6rem 0;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 0.95rem;
-        }
-
-        .tense-examples li:last-child {
-            border-bottom: none;
-        }
-
-        .tense-examples .example-en {
-            color: var(--dark);
-            font-weight: 600;
-        }
-
-        .tense-examples .example-he {
-            color: #64748b;
-            font-size: 0.85rem;
-            margin-top: 0.2rem;
-        }
-
-        /* Match Game */
-        .match-game {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .match-item {
-            padding: 1.2rem;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            font-weight: 700;
-            border: 3px solid transparent;
-        }
-
-        .match-item:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
-        }
-
-        .match-item.selected {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
-        }
-
-        .match-item.matched {
-            border-color: var(--success);
-            background: rgba(16, 185, 129, 0.1);
-            pointer-events: none;
-        }
-
-        .match-item.wrong {
-            border-color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        /* Score Popup */
-        .score-popup {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: var(--card-bg);
-            border-radius: 30px;
-            padding: 3rem;
-            box-shadow: var(--shadow-hover);
-            z-index: 10000;
-            text-align: center;
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .score-popup.show {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .score-popup-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 9999;
-            display: none;
-        }
-
-        .score-popup-overlay.show {
-            display: block;
-        }
-
-        .score-emoji {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .score-value {
-            font-family: 'Poppins', sans-serif;
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .score-message {
-            font-size: 1.2rem;
-            color: #64748b;
-            margin: 1rem 0;
-        }
-
-        /* Confetti Canvas */
-        #confetti-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 10001;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .quiz-options { grid-template-columns: 1fr; }
-            .match-game { grid-template-columns: 1fr; }
-            .header-content { flex-direction: column; gap: 1rem; }
-            .stats-bar { flex-wrap: wrap; justify-content: center; }
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-        }
-
-        .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--dark);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-
-        .tooltip:hover::after {
-            opacity: 1;
-            bottom: calc(100% + 10px);
-        }
-
-        /* Filter buttons */
-        .filter-bar {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .filter-btn {
-            padding: 0.6rem 1.2rem;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border-radius: 50px;
-            font-family: 'Heebo', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: white;
-            color: var(--primary);
-        }
-
-        /* Word of the Day */
-        .word-of-day {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .word-of-day::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 5px;
-            background: var(--gradient-2);
-        }
-
-        .word-of-day-label {
-            font-size: 0.85rem;
-            color: var(--secondary);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-        }
-
-        .word-of-day-word {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .word-of-day-meaning {
-            font-size: 1.2rem;
-            color: #64748b;
-            margin-bottom: 1rem;
-        }
-
-        .word-of-day-example {
-            font-style: italic;
-            color: var(--primary);
-            font-size: 1rem;
-            padding: 1rem;
-            background: var(--light);
-            border-radius: 12px;
-        }
-
-        /* Passive vs Active toggle */
-        .toggle-container {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .toggle-btn {
-            padding: 1rem 2rem;
-            border: 2px solid white;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border-radius: 16px;
-            font-family: 'Heebo', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .toggle-btn.active {
-            background: white;
-            color: var(--primary);
-        }
-
-        /* Sentence builder */
-        .sentence-builder {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 1.5rem;
-        }
-
-        .sentence-words {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            min-height: 60px;
-            padding: 1rem;
-            background: var(--light);
-            border-radius: 16px;
-            border: 2px dashed #cbd5e1;
-        }
-
-        .word-chip {
-            padding: 0.5rem 1rem;
-            background: white;
-            border: 2px solid var(--primary);
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            user-select: none;
-        }
-
-        .word-chip:hover {
-            background: var(--primary);
-            color: white;
-            transform: scale(1.1);
-        }
-
-        .word-chip.used {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .sentence-target {
-            min-height: 60px;
-            padding: 1rem;
-            background: white;
-            border: 2px solid var(--primary);
-            border-radius: 16px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .sentence-target .word-chip {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* Level badge */
-        .level-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            padding: 0.3rem 0.8rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-
-        .level-easy { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-        .level-medium { background: rgba(245, 158, 11, 0.2); color: var(--accent); }
-        .level-hard { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Master - תרגול אנגלית</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;color:#1e1b4b}
+header{background:rgba(255,255,255,.95);padding:1rem 2rem;position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.1)}
+.header-content{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.logo{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stats{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.stat{background:#f8fafc;padding:.5rem 1rem;border-radius:12px;text-align:center}
+.stat-value{font-size:1.3rem;font-weight:700;color:#6366f1}
+.stat-label{font-size:.75rem;color:#64748b}
+.streak{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff;padding:.5rem 1.2rem;border-radius:50px;font-weight:700}
+nav{background:rgba(255,255,255,.9);padding:.5rem;position:sticky;top:60px;z-index:999;backdrop-filter:blur(10px)}
+.nav-content{max-width:1200px;margin:0 auto;display:flex;gap:.3rem;overflow-x:auto;padding:.3rem}
+.nav-btn{padding:.6rem 1.2rem;border:none;background:transparent;color:#64748b;font-weight:600;border-radius:12px;cursor:pointer;transition:all .3s;white-space:nowrap;font-size:.9rem}
+.nav-btn:hover{background:rgba(99,102,241,.1);color:#6366f1}
+.nav-btn.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;box-shadow:0 4px 15px rgba(99,102,241,.4)}
+.container{max-width:1200px;margin:0 auto;padding:1.5rem}
+.section{display:none;animation:fadeIn .5s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero{text-align:center;padding:2rem 1rem;color:#fff}
+.hero h1{font-size:2.5rem;font-weight:800;margin-bottom:.5rem;text-shadow:0 4px 20px rgba(0,0,0,.2)}
+.hero p{font-size:1.1rem;opacity:.9}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.5rem 0}
+.card{background:#fff;border-radius:20px;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.15);cursor:pointer;transition:all .3s;position:relative;overflow:hidden;border-top:4px solid #6366f1}
+.card:nth-child(2){border-top-color:#ec4899}
+.card:nth-child(3){border-top-color:#4facfe}
+.card:nth-child(4){border-top-color:#10b981}
+.card:nth-child(5){border-top-color:#f59e0b}
+.card:nth-child(6){border-top-color:#8b5cf6}
+.card:hover{transform:translateY(-5px);box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.card-icon{font-size:2.5rem;margin-bottom:.5rem}
+.card h3{font-size:1.2rem;margin-bottom:.3rem}
+.card p{color:#64748b;font-size:.9rem}
+.progress-bar{height:6px;background:#e2e8f0;border-radius:10px;margin-top:.8rem;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:10px;transition:width .5s;width:0%}
+.filter-bar{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap;justify-content:center}
+.filter-btn{padding:.6rem 1.2rem;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.2);color:#fff;border-radius:50px;font-weight:600;cursor:pointer;transition:all .3s}
+.filter-btn:hover,.filter-btn.active{background:#fff;color:#6366f1}
+.flashcard-container{perspective:1000px;max-width:400px;margin:1rem auto}
+.flashcard{width:100%;height:250px;position:relative;transform-style:preserve-3d;transition:transform .6s;cursor:pointer}
+.flashcard.flipped{transform:rotateY(180deg)}
+.flashcard-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.15);font-size:1.3rem;font-weight:700;color:#fff}
+.flashcard-front{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
+.flashcard-back{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);transform:rotateY(180deg)}
+.flashcard-word{font-size:2rem;margin-bottom:.5rem}
+.controls{display:flex;justify-content:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap}
+.btn{padding:.8rem 1.5rem;border:none;border-radius:12px;font-weight:700;cursor:pointer;transition:all .3s;font-size:.9rem}
+.btn-primary{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff}
+.btn-secondary{background:#fff;color:#6366f1;border:2px solid #6366f1}
+.btn-success{background:#10b981;color:#fff}
+.btn-danger{background:#ef4444;color:#fff}
+.btn:hover{transform:translateY(-2px);box-shadow:0 5px 20px rgba(0,0,0,.2)}
+.quiz-container{background:#fff;border-radius:20px;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.15);max-width:700px;margin:0 auto}
+.quiz-progress{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;font-size:.9rem}
+.quiz-progress-bar{flex:1;height:8px;background:#e2e8f0;border-radius:10px;margin:0 .5rem;overflow:hidden}
+.quiz-progress-fill{height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:10px;transition:width .5s;width:0%}
+.quiz-question{font-size:1.2rem;font-weight:700;margin-bottom:1rem;line-height:1.6}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.quiz-option{padding:1rem;border:2px solid #e2e8f0;border-radius:12px;cursor:pointer;transition:all .3s;text-align:center;background:#fff}
+.quiz-option:hover{border-color:#6366f1;background:rgba(99,102,241,.05)}
+.quiz-option.correct{border-color:#10b981;background:rgba(16,185,129,.1);color:#10b981}
+.quiz-option.wrong{border-color:#ef4444;background:rgba(239,68,68,.1);color:#ef4444}
+.quiz-option.disabled{pointer-events:none;opacity:.6}
+.feedback{padding:1rem;border-radius:12px;margin-bottom:1rem;display:none;font-weight:600}
+.feedback.show{display:block}
+.feedback.correct{background:rgba(16,185,129,.1);color:#10b981;border:1px solid #10b981}
+.feedback.wrong{background:rgba(239,68,68,.1);color:#ef4444;border:1px solid #ef4444}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.8rem}
+.vocab-item{background:#fff;border-radius:12px;padding:1rem;box-shadow:0 4px 15px rgba(0,0,0,.08);display:flex;align-items:center;gap:.8rem;cursor:pointer;transition:all .3s}
+.vocab-item:hover{transform:translateX(-3px);box-shadow:0 10px 40px rgba(0,0,0,.15)}
+.vocab-num{width:35px;height:35px;border-radius:10px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.vocab-word{font-weight:700;color:#1e1b4b}
+.vocab-meaning{font-size:.85rem;color:#64748b}
+.tense-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.tense-card{background:#fff;border-radius:20px;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.15)}
+.tense-card h3{color:#6366f1;margin-bottom:.5rem;font-size:1.1rem}
+.tense-formula{background:#f8fafc;padding:.8rem;border-radius:10px;font-weight:700;text-align:center;border:2px dashed #6366f1;margin-bottom:.8rem;font-size:.95rem}
+.tense-examples{list-style:none;font-size:.9rem}
+.tense-examples li{padding:.5rem 0;border-bottom:1px solid #e2e8f0}
+.tense-examples li:last-child{border-bottom:none}
+.tense-examples .he{color:#64748b;font-size:.8rem}
+.exercise-box{background:#fff;border-radius:16px;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.15);margin-bottom:1rem;border-right:4px solid #6366f1}
+.exercise-box.active{border-right-color:#f59e0b;background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%)}
+.exercise-box.passive{border-right-color:#6366f1;background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 100%)}
+.exercise-label{font-size:.8rem;font-weight:700;text-transform:uppercase;opacity:.7;margin-bottom:.3rem}
+.exercise-text{font-size:1.1rem;font-weight:600}
+.exercise-input{width:100%;padding:1rem;border:2px solid #e2e8f0;border-radius:12px;font-size:1rem;margin-top:.5rem;transition:all .3s}
+.exercise-input:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 4px rgba(99,102,241,.1)}
+.exercise-input.correct{border-color:#10b981;background:rgba(16,185,129,.05)}
+.exercise-input.wrong{border-color:#ef4444;background:rgba(239,68,68,.05)}
+.reading-text{background:#fff;border-radius:20px;padding:2rem;box-shadow:0 10px 40px rgba(0,0,0,.15);line-height:2;font-size:1rem;margin-bottom:1.5rem;border-right:4px solid #ec4899}
+.reading-text h2{color:#6366f1;margin-bottom:1rem}
+.reading-text p{margin-bottom:1rem}
+.question-card{background:#fff;border-radius:16px;padding:1.2rem;box-shadow:0 10px 40px rgba(0,0,0,.15);margin-bottom:1rem}
+.question-text{font-weight:700;margin-bottom:.8rem}
+.answer-option{padding:.8rem;border:2px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:all .3s;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.answer-option:hover{border-color:#6366f1;background:rgba(99,102,241,.05)}
+.answer-option.selected{border-color:#6366f1;background:rgba(99,102,241,.1)}
+.answer-option.correct{border-color:#10b981;background:rgba(16,185,129,.1)}
+.answer-option.wrong{border-color:#ef4444;background:rgba(239,68,68,.1)}
+.answer-letter{width:28px;height:28px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0}
+.answer-option.selected .answer-letter,.answer-option.correct .answer-letter{background:#6366f1;color:#fff}
+.answer-option.correct .answer-letter{background:#10b981}
+.writing-prompt{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff;padding:1.5rem;border-radius:20px;margin-bottom:1rem}
+.writing-prompt h3{margin-bottom:.5rem}
+.writing-prompt ul{list-style:none;padding:0}
+.writing-prompt li{padding:.3rem 0;padding-right:1.2rem;position:relative}
+.writing-prompt li::before{content:'✓';position:absolute;right:0;font-weight:700}
+.writing-textarea{width:100%;min-height:250px;padding:1rem;border:2px solid #e2e8f0;border-radius:16px;font-size:1rem;line-height:1.8;resize:vertical}
+.writing-textarea:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 4px rgba(99,102,241,.1)}
+.timer-display{font-size:1.5rem;font-weight:700;background:#1e1b4b;color:#fff;padding:.5rem 1rem;border-radius:10px;min-width:100px;text-align:center;font-family:monospace}
+.match-game{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:600px;margin:0 auto}
+.match-item{padding:1rem;background:#fff;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);cursor:pointer;transition:all .3s;text-align:center;font-weight:700;border:3px solid transparent}
+.match-item:hover{transform:translateY(-3px)}
+.match-item.selected{border-color:#6366f1;background:rgba(99,102,241,.1)}
+.match-item.matched{border-color:#10b981;background:rgba(16,185,129,.1);pointer-events:none}
+.match-item.wrong{border-color:#ef4444;background:rgba(239,68,68,.1);animation:shake .5s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.score-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:9999;display:none}
+.score-overlay.show{display:block}
+.score-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:#fff;border-radius:24px;padding:2rem;box-shadow:0 20px 60px rgba(0,0,0,.2);z-index:10000;text-align:center;transition:transform .5s cubic-bezier(.68,-.55,.265,1.55);max-width:90%;width:400px}
+.score-popup.show{transform:translate(-50%,-50%) scale(1)}
+.score-emoji{font-size:3rem;margin-bottom:.5rem}
+.score-value{font-size:2.5rem;font-weight:800;color:#6366f1}
+.score-message{color:#64748b;margin:.5rem 0}
+.dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem}
+.dashboard-card{background:#fff;border-radius:20px;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.15);text-align:center}
+.dashboard-icon{font-size:2.5rem;margin-bottom:.5rem}
+.dashboard-value{font-size:2rem;font-weight:800;color:#6366f1}
+.dashboard-label{color:#64748b;font-size:.85rem}
+.daily-challenge{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem;text-align:center}
+.word-of-day{background:#fff;border-radius:20px;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.15);text-align:center;max-width:500px;margin:0 auto 1.5rem;position:relative;overflow:hidden;border-top:4px solid #ec4899}
+.word-of-day-label{font-size:.8rem;color:#ec4899;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:.5rem}
+.word-of-day-word{font-size:2rem;font-weight:800;color:#1e1b4b;margin-bottom:.3rem;cursor:pointer}
+.word-of-day-meaning{font-size:1rem;color:#64748b;margin-bottom:.5rem}
+.word-of-day-example{font-style:italic;color:#6366f1;padding:.8rem;background:#f8fafc;border-radius:10px;font-size:.9rem}
+.toggle-container{display:flex;justify-content:center;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.toggle-btn{padding:.8rem 1.5rem;border:2px solid #fff;background:rgba(255,255,255,.2);color:#fff;border-radius:12px;font-weight:700;cursor:pointer;transition:all .3s}
+.toggle-btn.active{background:#fff;color:#6366f1}
+@media(max-width:768px){.hero h1{font-size:1.8rem}.quiz-options{grid-template-columns:1fr}.match-game{grid-template-columns:1fr}.header-content{flex-direction:column}}
+</style>
 </head>
 <body>
-    <div class="bg-animation"></div>
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
-
-    <canvas id="confetti-canvas"></canvas>
-
-    <header>
-        <div class="header-content">
-            <div class="logo">
-                <span class="logo-icon">🚀</span>
-                <span>English Master</span>
-            </div>
-            <div class="stats-bar">
-                <div class="stat-item">
-                    <div class="stat-value" id="total-answered">0</div>
-                    <div class="stat-label">תשובות</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="total-correct">0</div>
-                    <div class="stat-label">נכונות</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="accuracy">0%</div>
-                    <div class="stat-label">דיוק</div>
-                </div>
-                <div class="streak">
-                    <span>🔥</span>
-                    <span id="streak-count">0</span>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <nav>
-        <div class="nav-content">
-            <button class="nav-btn active" onclick="showSection('home')">
-                <span>🏠</span> דף הבית
-            </button>
-            <button class="nav-btn" onclick="showSection('vocabulary')">
-                <span>📚</span> אוצר מילים
-            </button>
-            <button class="nav-btn" onclick="showSection('grammar')">
-                <span>⚡</span> דקדוק
-            </button>
-            <button class="nav-btn" onclick="showSection('passive')">
-                <span>🔄</span> Passive Voice
-            </button>
-            <button class="nav-btn" onclick="showSection('unseen')">
-                <span>📖</span> Unseen
-            </button>
-            <button class="nav-btn" onclick="showSection('writing')">
-                <span>✍️</span> כתיבה
-            </button>
-            <button class="nav-btn" onclick="showSection('games')">
-                <span>🎮</span> משחקים
-            </button>
-            <button class="nav-btn" onclick="showSection('progress')">
-                <span>📊</span> התקדמות
-            </button>
-        </div>
-    </nav>
-
-    <div class="container">
-        <!-- HOME SECTION -->
-        <div id="home" class="section active">
-            <div class="hero">
-                <h1>ברוכים הבאים ל-English Master!</h1>
-                <p>האתר המטורף לתרגול אנגלית למבחני מעבר - כיתות ח' וט'</p>
-            </div>
-
-            <div class="daily-challenge">
-                <div class="daily-challenge-content">
-                    <h2>🎯 אתגר יומי</h2>
-                    <p>השלם 20 שאלות היום כדי לשמור על הרצף!</p>
-                    <button class="btn btn-primary" onclick="showSection('vocabulary'); startDailyChallenge();">
-                        <span>▶️</span> התחל אתגר
-                    </button>
-                </div>
-            </div>
-
-            <div class="word-of-day" id="word-of-day">
-                <div class="word-of-day-label">📖 מילת היום</div>
-                <div class="word-of-day-word" id="wod-word">Achieve</div>
-                <div class="word-of-day-meaning" id="wod-meaning">להשיג, להצליח</div>
-                <div class="word-of-day-example" id="wod-example">
-                    "She worked hard to achieve her goals."<br>
-                    <small>היא עבדה קשה כדי להשיג את המטרות שלה.</small>
-                </div>
-            </div>
-
-            <div class="cards-grid">
-                <div class="card" onclick="showSection('vocabulary')">
-                    <div class="card-icon">📚</div>
-                    <h3>אוצר מילים</h3>
-                    <p>יחידות 1-4 - כרטיסיות, חידון ורשימות מילים</p>
-                    <div class="card-progress">
-                        <div class="card-progress-bar" id="progress-vocab" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="card" onclick="showSection('grammar')">
-                    <div class="card-icon">⚡</div>
-                    <h3>דקדוק</h3>
-                    <p>Present, Past, Future - Simple & Progressive</p>
-                    <div class="card-progress">
-                        <div class="card-progress-bar" id="progress-grammar" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="card" onclick="showSection('passive')">
-                    <div class="card-icon">🔄</div>
-                    <h3>Passive Voice</h3>
-                    <p>המרה מ-Active ל-Passive בכל הזמנים</p>
-                    <div class="card-progress">
-                        <div class="card-progress-bar" id="progress-passive" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="card" onclick="showSection('unseen')">
-                    <div class="card-icon">📖</div>
-                    <h3>Unseen</h3>
-                    <p>טקסטים עם שאלות הבנה</p>
-                    <div class="card-progress">
-                        <div class="card-progress-bar" id="progress-unseen" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="card" onclick="showSection('writing')">
-                    <div class="card-icon">✍️</div>
-                    <h3>כתיבה</h3>
-                    <p>נושאים לכתיבה תיאורית ודעה</p>
-                    <div class="card-progress">
-                        <div class="card-progress-bar" id="progress-writing" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="card" onclick="showSection('games')">
-                    <div class="card-icon">🎮</div>
-                    <h3>משחקים</h3>
-                    <p>התאמות, בנית משפטים ועוד</p>
-                    <div class="card-progress">
-                        <div class="card-progress-bar" id="progress-games" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- VOCABULARY SECTION -->
-        <div id="vocabulary" class="section">
-            <h2 class="section-title">📚 אוצר מילים</h2>
-            <p class="section-subtitle">יחידות 1-4 - כרטיסיות, חידון ורשימות</p>
-
-            <div class="filter-bar">
-                <button class="filter-btn active" onclick="showVocabMode('flashcards')">🃏 כרטיסיות</button>
-                <button class="filter-btn" onclick="showVocabMode('quiz')">❓ חידון</button>
-                <button class="filter-btn" onclick="showVocabMode('list')">📋 רשימה</button>
-                <button class="filter-btn" onclick="showVocabMode('match')">🔗 התאמה</button>
-            </div>
-
-            <!-- Flashcards -->
-            <div id="vocab-flashcards" class="vocab-mode">
-                <div class="flashcard-container">
-                    <div class="flashcard" id="flashcard" onclick="flipCard()">
-                        <div class="flashcard-face flashcard-front">
-                            <div class="flashcard-word" id="fc-word">Achieve</div>
-                            <div class="flashcard-hint">לחץ כדי לראות את התרגום</div>
-                        </div>
-                        <div class="flashcard-face flashcard-back">
-                            <div class="flashcard-word" id="fc-meaning">להשיג</div>
-                            <div class="flashcard-hint" id="fc-sentence">"She worked hard to achieve her goals."</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flashcard-controls">
-                    <button class="btn btn-secondary" onclick="prevCard()">⬅️ הקודם</button>
-                    <button class="btn btn-success" onclick="markKnown()">✅ יודע</button>
-                    <button class="btn btn-danger" onclick="markUnknown()">❌ לא יודע</button>
-                    <button class="btn btn-primary" onclick="nextCard()">הבא ➡️</button>
-                </div>
-                <p style="text-align:center; color:white; margin-top:1rem;">
-                    כרטיס <span id="fc-current">1</span> מתוך <span id="fc-total">50</span>
-                </p>
-            </div>
-
-            <!-- Quiz -->
-            <div id="vocab-quiz" class="vocab-mode" style="display:none;">
-                <div class="quiz-container">
-                    <div class="quiz-progress">
-                        <span>שאלה <span id="vq-current">1</span>/<span id="vq-total">20</span></span>
-                        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="vq-progress"></div></div>
-                        <span id="vq-score">0</span> נקודות</span>
-                    </div>
-                    <div class="quiz-feedback" id="vq-feedback"></div>
-                    <div class="quiz-question" id="vq-question">מה הפירוש של המילה "Achieve"?</div>
-                    <div class="quiz-options" id="vq-options">
-                        <div class="quiz-option" onclick="selectVocabAnswer(0)">להיכשל</div>
-                        <div class="quiz-option" onclick="selectVocabAnswer(1)">להשיג</div>
-                        <div class="quiz-option" onclick="selectVocabAnswer(2)">לוותר</div>
-                        <div class="quiz-option" onclick="selectVocabAnswer(3)">לשכוח</div>
-                    </div>
-                    <div style="text-align:center; margin-top:1rem;">
-                        <button class="btn btn-primary" onclick="nextVocabQuestion()">שאלה הבאה ➡️</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- List -->
-            <div id="vocab-list" class="vocab-mode" style="display:none;">
-                <div class="vocab-grid" id="vocab-list-container"></div>
-            </div>
-
-            <!-- Match -->
-            <div id="vocab-match" class="vocab-mode" style="display:none;">
-                <div style="text-align:center; margin-bottom:1rem; color:white;">
-                    <h3>התאם את המילה לפירוש שלה!</h3>
-                    <p>נקודות: <span id="match-score">0</span></p>
-                </div>
-                <div class="match-game" id="match-game"></div>
-            </div>
-        </div>
-
-        <!-- GRAMMAR SECTION -->
-        <div id="grammar" class="section">
-            <h2 class="section-title">⚡ דקדוק</h2>
-            <p class="section-subtitle">כל הזמנים - Present, Past, Future</p>
-
-            <div class="filter-bar">
-                <button class="filter-btn active" onclick="showGrammarMode('tenses')">📖 זמנים</button>
-                <button class="filter-btn" onclick="showGrammarMode('quiz')">❓ תרגול</button>
-                <button class="filter-btn" onclick="showGrammarMode('sentence-builder')">🔧 בנית משפטים</button>
-            </div>
-
-            <div id="grammar-tenses" class="grammar-mode">
-                <div class="tense-grid">
-                    <div class="tense-card">
-                        <h3>📗 Present Simple</h3>
-                        <div class="tense-formula">S + V1(s/es)</div>
-                        <ul class="tense-examples">
-                            <li><div class="example-en">I play football every day.</div><div class="example-he">אני משחק כדורגל כל יום.</div></li>
-                            <li><div class="example-en">She watches TV.</div><div class="example-he">היא צופה בטלוויזיה.</div></li>
-                            <li><div class="example-en">Do they live here?</div><div class="example-he">הם גרים כאן?</div></li>
-                        </ul>
-                    </div>
-                    <div class="tense-card">
-                        <h3>📙 Present Progressive</h3>
-                        <div class="tense-formula">S + am/is/are + V-ing</div>
-                        <ul class="tense-examples">
-                            <li><div class="example-en">I am playing now.</div><div class="example-he">אני משחק עכשיו.</div></li>
-                            <li><div class="example-en">She is watching TV.</div><div class="example-he">היא צופה בטלוויזיה עכשיו.</div></li>
-                            <li><div class="example-en">Are they playing?</div><div class="example-he">הם משחקים עכשיו?</div></li>
-                        </ul>
-                    </div>
-                    <div class="tense-card">
-                        <h3>📕 Past Simple</h3>
-                        <div class="tense-formula">S + V2 (או did + V1)</div>
-                        <ul class="tense-examples">
-                            <li><div class="example-en">I played yesterday.</div><div class="example-he">אני שחקתי אתמול.</div></li>
-                            <li><div class="example-en">She went to school.</div><div class="example-he">היא הלכה לבית ספר.</div></li>
-                            <li><div class="example-en">Did they watch?</div><div class="example-he">הם צפו?</div></li>
-                        </ul>
-                    </div>
-                    <div class="tense-card">
-                        <h3>📘 Future Simple</h3>
-                        <div class="tense-formula">S + will + V1</div>
-                        <ul class="tense-examples">
-                            <li><div class="example-en">I will play tomorrow.</div><div class="example-he">אני אשחק מחר.</div></li>
-                            <li><div class="example-en">She will travel next week.</div><div class="example-he">היא תטייל בשבוע הבא.</div></li>
-                            <li><div class="example-en">Will they come?</div><div class="example-he">הם יבואו?</div></li>
-                        </ul>
-                    </div>
-                    <div class="tense-card">
-                        <h3>📒 Past Progressive</h3>
-                        <div class="tense-formula">S + was/were + V-ing</div>
-                        <ul class="tense-examples">
-                            <li><div class="example-en">I was playing at 5pm.</div><div class="example-he">אני שחקתי בשעה 5.</div></li>
-                            <li><div class="example-en">They were watching TV.</div><div class="example-he">הם צפו בטלוויזיה.</div></li>
-                            <li><div class="example-en">Was she reading?</div><div class="example-he">היא קראה?</div></li>
-                        </ul>
-                    </div>
-                    <div class="tense-card">
-                        <h3>🎯 טיפים חשובים</h3>
-                        <ul class="tense-examples">
-                            <li><div class="example-en">Always, usually, often → Present Simple</div><div class="example-he">תמיד, בדרך כלל, לעיתים קרובות</div></li>
-                            <li><div class="example-en">Now, at the moment → Present Progressive</div><div class="example-he">עכשיו, ברגע זה</div></li>
-                            <li><div class="example-en">Yesterday, last week → Past Simple</div><div class="example-he">אתמול, שבוע שעבר</div></li>
-                            <li><div class="example-en">Tomorrow, next year → Future Simple</div><div class="example-he">מחר, שנה הבאה</div></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div id="grammar-quiz" class="grammar-mode" style="display:none;">
-                <div class="quiz-container">
-                    <div class="quiz-progress">
-                        <span>שאלה <span id="gq-current">1</span>/<span id="gq-total">15</span></span>
-                        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="gq-progress"></div></div>
-                        <span id="gq-score">0</span> נקודות</span>
-                    </div>
-                    <div class="quiz-feedback" id="gq-feedback"></div>
-                    <div class="quiz-question" id="gq-question"></div>
-                    <div class="quiz-options" id="gq-options"></div>
-                    <div style="text-align:center; margin-top:1rem;">
-                        <button class="btn btn-primary" onclick="nextGrammarQuestion()">שאלה הבאה ➡️</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="grammar-sentence-builder" class="grammar-mode" style="display:none;">
-                <div class="sentence-builder">
-                    <h3 style="margin-bottom:1rem; color:var(--dark);">בנה את המשפט הנכון:</h3>
-                    <p style="margin-bottom:1rem; color:#64748b;">גרור את המילים למקום הנכון או לחץ עליהן בסדר הנכון</p>
-                    <div style="margin-bottom:1rem; font-weight:700; color:var(--primary);" id="sb-instruction">
-                        בנה משפט ב-Present Simple: "הם משחקים כדורגל כל יום"
-                    </div>
-                    <div class="sentence-target" id="sentence-target"></div>
-                    <div style="margin:1rem 0; text-align:center; color:#64748b;">👆 לחץ על המילים כדי לבנות את המשפט</div>
-                    <div class="sentence-words" id="sentence-words"></div>
-                    <div style="text-align:center; margin-top:1rem;">
-                        <button class="btn btn-secondary" onclick="resetSentence()">🔄 אפס</button>
-                        <button class="btn btn-primary" onclick="checkSentence()">✅ בדוק</button>
-                        <button class="btn btn-success" onclick="nextSentence()">➡️ משפט הבא</button>
-                    </div>
-                    <div id="sb-feedback" style="margin-top:1rem; padding:1rem; border-radius:12px; display:none;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PASSIVE VOICE SECTION -->
-        <div id="passive" class="section">
-            <h2 class="section-title">🔄 Passive Voice</h2>
-            <p class="section-subtitle">Active → Passive בכל הזמנים</p>
-
-            <div class="toggle-container">
-                <button class="toggle-btn active" onclick="showPassiveMode('active-to-passive')">Active → Passive</button>
-                <button class="toggle-btn" onclick="showPassiveMode('passive-to-active')">Passive → Active</button>
-                <button class="toggle-btn" onclick="showPassiveMode('quiz')">חידון</button>
-            </div>
-
-            <div id="passive-active-to-passive" class="passive-mode">
-                <div style="max-width:800px; margin:0 auto;">
-                    <div class="exercise-box active-voice">
-                        <div class="exercise-label">Active Voice</div>
-                        <div class="exercise-text" id="pv-active">The chef cooks the meal.</div>
-                    </div>
-                    <div style="text-align:center; font-size:2rem; margin:1rem 0;">⬇️</div>
-                    <div class="exercise-box passive-voice">
-                        <div class="exercise-label">Passive Voice</div>
-                        <input type="text" class="exercise-input" id="pv-input" placeholder="הקלד את המשפט ב-Passive...">
-                    </div>
-                    <div style="text-align:center; margin-top:1.5rem;">
-                        <button class="btn btn-primary" onclick="checkPassive()">✅ בדוק</button>
-                        <button class="btn btn-secondary" onclick="showPassiveHint()">💡 רמז</button>
-                        <button class="btn btn-success" onclick="nextPassive()">➡️ הבא</button>
-                    </div>
-                    <div id="pv-feedback" style="margin-top:1rem; padding:1rem; border-radius:12px; display:none;"></div>
-                </div>
-            </div>
-
-            <div id="passive-passive-to-active" class="passive-mode" style="display:none;">
-                <div style="max-width:800px; margin:0 auto;">
-                    <div class="exercise-box passive-voice">
-                        <div class="exercise-label">Passive Voice</div>
-                        <div class="exercise-text" id="pv-passive">The meal is cooked by the chef.</div>
-                    </div>
-                    <div style="text-align:center; font-size:2rem; margin:1rem 0;">⬇️</div>
-                    <div class="exercise-box active-voice">
-                        <div class="exercise-label">Active Voice</div>
-                        <input type="text" class="exercise-input" id="pv-input2" placeholder="הקלד את המשפט ב-Active...">
-                    </div>
-                    <div style="text-align:center; margin-top:1.5rem;">
-                        <button class="btn btn-primary" onclick="checkPassive2()">✅ בדוק</button>
-                        <button class="btn btn-success" onclick="nextPassive2()">➡️ הבא</button>
-                    </div>
-                    <div id="pv-feedback2" style="margin-top:1rem; padding:1rem; border-radius:12px; display:none;"></div>
-                </div>
-            </div>
-
-            <div id="passive-quiz" class="passive-mode" style="display:none;">
-                <div class="quiz-container">
-                    <div class="quiz-progress">
-                        <span>שאלה <span id="pq-current">1</span>/<span id="pq-total">15</span></span>
-                        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="pq-progress"></div></div>
-                        <span id="pq-score">0</span> נקודות</span>
-                    </div>
-                    <div class="quiz-feedback" id="pq-feedback"></div>
-                    <div class="quiz-question" id="pq-question"></div>
-                    <div class="quiz-options" id="pq-options"></div>
-                    <div style="text-align:center; margin-top:1rem;">
-                        <button class="btn btn-primary" onclick="nextPassiveQuestion()">שאלה הבאה ➡️</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- UNSEEN SECTION -->
-        <div id="unseen" class="section">
-            <h2 class="section-title">📖 Unseen</h2>
-            <p class="section-subtitle">טקסטים עם שאלות הבנה</p>
-
-            <div class="filter-bar">
-                <button class="filter-btn active" onclick="showUnseen(0)">טקסט 1</button>
-                <button class="filter-btn" onclick="showUnseen(1)">טקסט 2</button>
-                <button class="filter-btn" onclick="showUnseen(2)">טקסט 3</button>
-            </div>
-
-            <div id="unseen-container">
-                <div class="reading-text" id="unseen-text"></div>
-                <div class="reading-questions" id="unseen-questions"></div>
-                <div style="text-align:center; margin-top:2rem;">
-                    <button class="btn btn-primary" onclick="checkUnseen()">✅ בדוק תשובות</button>
-                    <button class="btn btn-success" onclick="showUnseenScore()">📊 ציון</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- WRITING SECTION -->
-        <div id="writing" class="section">
-            <h2 class="section-title">✍️ כתיבה</h2>
-            <p class="section-subtitle">תרגול כתיבה - תיאורית ודעה</p>
-
-            <div class="filter-bar">
-                <button class="filter-btn active" onclick="showWritingTopic(0)">תיאורית</button>
-                <button class="filter-btn" onclick="showWritingTopic(1)">דעה</button>
-                <button class="filter-btn" onclick="showWritingTopic(2)">סיפור</button>
-            </div>
-
-            <div id="writing-container">
-                <div class="writing-prompt" id="writing-prompt"></div>
-                <div class="writing-timer">
-                    <span>⏱️ זמן:</span>
-                    <div class="timer-display" id="timer">15:00</div>
-                    <button class="btn btn-primary" onclick="startTimer()">▶️ התחל</button>
-                    <button class="btn btn-secondary" onclick="resetTimer()">🔄 אפס</button>
-                </div>
-                <textarea class="writing-textarea" id="writing-area" placeholder="כתוב כאן..."></textarea>
-                <div style="text-align:center; margin-top:1rem;">
-                    <button class="btn btn-primary" onclick="saveWriting()">💾 שמור</button>
-                    <button class="btn btn-success" onclick="countWords()">📝 מספר מילים</button>
-                </div>
-                <div id="word-count" style="text-align:center; margin-top:1rem; color:white; font-size:1.2rem; font-weight:700;"></div>
-            </div>
-        </div>
-
-        <!-- GAMES SECTION -->
-        <div id="games" class="section">
-            <h2 class="section-title">🎮 משחקים</h2>
-            <p class="section-subtitle">למידה מהנה עם משחקים!</p>
-
-            <div class="cards-grid">
-                <div class="card" onclick="startMemoryGame()">
-                    <div class="card-icon">🧠</div>
-                    <h3>משחק זיכרון</h3>
-                    <p>התאם כרטיסים עם מילים ופירושים</p>
-                </div>
-                <div class="card" onclick="startSpeedGame()">
-                    <div class="card-icon">⚡</div>
-                    <h3>משחק מהירות</h3>
-                    <p>כמה מילים תוכל לתרגם בדקה?</p>
-                </div>
-                <div class="card" onclick="startHangman()">
-                    <div class="card-icon">🎯</div>
-                    <h3>הangman</h3>
-                    <p>נחש את המילה הנכונה</p>
-                </div>
-                <div class="card" onclick="startScramble()">
-                    <div class="card-icon">🔄</div>
-                    <h3>מילים מעורבבות</h3>
-                    <p>סדר את האותיות במילה הנכונה</p>
-                </div>
-            </div>
-
-            <div id="game-area" style="margin-top:2rem;"></div>
-        </div>
-
-        <!-- PROGRESS SECTION -->
-        <div id="progress" class="section">
-            <h2 class="section-title">📊 התקדמות</h2>
-            <p class="section-subtitle">עקוב אחרי ההתקדמות שלך</p>
-
-            <div class="dashboard">
-                <div class="dashboard-card">
-                    <div class="dashboard-icon">📚</div>
-                    <div class="dashboard-value" id="dash-vocab">0</div>
-                    <div class="dashboard-label">מילים שנלמדו</div>
-                </div>
-                <div class="dashboard-card">
-                    <div class="dashboard-icon">⚡</div>
-                    <div class="dashboard-value" id="dash-grammar">0</div>
-                    <div class="dashboard-label">שאלות דקדוק</div>
-                </div>
-                <div class="dashboard-card">
-                    <div class="dashboard-icon">🔄</div>
-                    <div class="dashboard-value" id="dash-passive">0</div>
-                    <div class="dashboard-label">תרגילי Passive</div>
-                </div>
-                <div class="dashboard-card">
-                    <div class="dashboard-icon">📖</div>
-                    <div class="dashboard-value" id="dash-unseen">0</div>
-                    <div class="dashboard-label">Unseen</div>
-                </div>
-                <div class="dashboard-card">
-                    <div class="dashboard-icon">✍️</div>
-                    <div class="dashboard-value" id="dash-writing">0</div>
-                    <div class="dashboard-label">כתיבות</div>
-                </div>
-                <div class="dashboard-card">
-                    <div class="dashboard-icon">🏆</div>
-                    <div class="dashboard-value" id="dash-total">0</div>
-                    <div class="dashboard-label">נקודות כולל</div>
-                </div>
-            </div>
-
-            <div style="background:var(--card-bg); border-radius:24px; padding:2rem; box-shadow:var(--shadow); margin-top:2rem;">
-                <h3 style="margin-bottom:1.5rem; color:var(--dark);">📅 פעילות יומית</h3>
-                <div id="activity-calendar" style="display:grid; grid-template-columns: repeat(7, 1fr); gap:0.5rem;"></div>
-            </div>
-
-            <div style="text-align:center; margin-top:2rem;">
-                <button class="btn btn-danger" onclick="resetProgress()">🗑️ אפס הכל</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Score Popup -->
-    <div class="score-popup-overlay" id="score-overlay"></div>
-    <div class="score-popup" id="score-popup">
-        <div class="score-emoji" id="score-emoji">🎉</div>
-        <div class="score-value" id="score-value">100%</div>
-        <div class="score-message" id="score-message">מעולה! המשך כך!</div>
-        <button class="btn btn-primary" onclick="closeScorePopup()" style="margin-top:1rem;">סגור</button>
-    </div>
-
-    <script>
-        // ===================== DATA =====================
-        const vocabulary = [
-            { word: "Achieve", meaning: "להשיג, להצליח", sentence: "She worked hard to achieve her goals." },
-            { word: "Adventure", meaning: "הרפתקה", sentence: "We went on an exciting adventure in the forest." },
-            { word: "Ambition", meaning: "שאיפה, שאפתנות", sentence: "His ambition is to become a doctor." },
-            { word: "Ancient", meaning: "עתיק", sentence: "We visited ancient ruins in Rome." },
-            { word: "Angry", meaning: "כועס", sentence: "He was angry when he lost the game." },
-            { word: "Annoy", meaning: "להרגיז", sentence: "The noise from the street started to annoy me." },
-            { word: "Anxious", meaning: "חרד, מודאג", sentence: "She felt anxious before the exam." },
-            { word: "Appear", meaning: "להופיע, להיראות", sentence: "The magician made the rabbit appear." },
-            { word: "Approach", meaning: "לגשת, גישה", sentence: "We need a new approach to solve this problem." },
-            { word: "Argue", meaning: "להתווכח", sentence: "They always argue about small things." },
-            { word: "Arrange", meaning: "לארגן", sentence: "I will arrange the meeting for tomorrow." },
-            { word: "Arrive", meaning: "להגיע", sentence: "The train will arrive at 6 o'clock." },
-            { word: "Ashamed", meaning: "מתבייש", sentence: "He was ashamed of his behavior." },
-            { word: "Attack", meaning: "לתקוף, התקפה", sentence: "The army decided to attack at dawn." },
-            { word: "Attempt", meaning: "ניסיון, לנסות", sentence: "This is my third attempt to pass the test." },
-            { word: "Attend", meaning: "להשתתף, להיות נוכח", sentence: "Did you attend the meeting yesterday?" },
-            { word: "Attract", meaning: "למשוך, למשוך תשומת לב", sentence: "The bright colors attract many tourists." },
-            { word: "Avoid", meaning: "להימנע", sentence: "You should avoid eating too much sugar." },
-            { word: "Awful", meaning: "נורא", sentence: "The weather was awful yesterday." },
-            { word: "Battle", meaning: "קרב", sentence: "The battle lasted for three days." },
-            { word: "Be aware", meaning: "להיות מודע", sentence: "Be aware of the dangers in the jungle." },
-            { word: "Be responsible for", meaning: "להיות אחראי על", sentence: "Who is responsible for this project?" },
-            { word: "Be used to", meaning: "להיות רגיל ל", sentence: "I am used to waking up early." },
-            { word: "Beat", meaning: "להביס, לנצח", sentence: "Our team beat the champions last week." },
-            { word: "Belong", meaning: "להשתייך", sentence: "This book belongs to the library." },
-            { word: "Benefit", meaning: "תועלת, להפיק תועלת", sentence: "Exercise has many health benefits." },
-            { word: "Blame", meaning: "להאשים", sentence: "Don't blame me for your mistakes." },
-            { word: "Boring", meaning: "משעמם", sentence: "The lecture was very boring." },
-            { word: "Brave", meaning: "אמיץ", sentence: "The brave firefighter saved the child." },
-            { word: "Break", meaning: "לשבור, הפסקה", sentence: "Let's take a break for coffee." },
-            { word: "Bright", meaning: "בהיר, חכם", sentence: "The room was bright and cheerful." },
-            { word: "Calm", meaning: "רגוע, להרגיע", sentence: "Try to stay calm during the interview." },
-            { word: "Care", meaning: "לדאוג, אכפתיות", sentence: "I don't care what they think." },
-            { word: "Careful", meaning: "זהיר", sentence: "Be careful when you cross the street." },
-            { word: "Cause", meaning: "סיבה, לגרום", sentence: "Smoking can cause lung cancer." },
-            { word: "Challenge", meaning: "אתגר, לאתגר", sentence: "Climbing the mountain was a real challenge." },
-            { word: "Chance", meaning: "סיכוי, הזדמנות", sentence: "Give me one more chance." },
-            { word: "Change", meaning: "לשנות, שינוי", sentence: "We need to change our plan." },
-            { word: "Character", meaning: "דמות, אופי", sentence: "The main character is very brave." },
-            { word: "Charge", meaning: "לחייב, להאשים, טעינה", sentence: "They charge five dollars for parking." },
-            { word: "Choice", meaning: "בחירה", sentence: "You have the choice to stay or leave." },
-            { word: "Choose", meaning: "לבחור", sentence: "I choose the blue shirt." },
-            { word: "Clever", meaning: "חכם, פיקח", sentence: "She found a clever solution to the problem." },
-            { word: "Climate", meaning: "אקלים", sentence: "The climate in this region is tropical." },
-            { word: "Climb", meaning: "לטפס", sentence: "We plan to climb the mountain tomorrow." },
-            { word: "Collect", meaning: "לאסוף", sentence: "I collect stamps from different countries." },
-            { word: "Comfortable", meaning: "נוח", sentence: "This chair is very comfortable." },
-            { word: "Common", meaning: "נפוץ, משותף", sentence: "This is a common mistake among students." },
-            { word: "Communicate", meaning: "לתקשר", sentence: "We need to communicate better as a team." },
-            { word: "Compare", meaning: "להשוות", sentence: "Let's compare the prices before buying." },
-            { word: "Compete", meaning: "להתחרות", sentence: "Athletes from around the world will compete." },
-        ];
-
-        const grammarQuestions = [
-            { question: "Choose the correct form: She _____ to school every day.", options: ["go", "goes", "going", "went"], correct: 1, tense: "Present Simple" },
-            { question: "Choose the correct form: They _____ TV right now.", options: ["watch", "watches", "are watching", "watched"], correct: 2, tense: "Present Progressive" },
-            { question: "Choose the correct form: I _____ a movie last night.", options: ["see", "saw", "seen", "seeing"], correct: 1, tense: "Past Simple" },
-            { question: "Choose the correct form: We _____ to the beach tomorrow.", options: ["will go", "go", "went", "going"], correct: 0, tense: "Future Simple" },
-            { question: "Choose the correct form: He _____ basketball when I called him.", options: ["plays", "played", "was playing", "is playing"], correct: 2, tense: "Past Progressive" },
-            { question: "Choose the correct form: The sun _____ in the east.", options: ["rise", "rises", "rising", "rose"], correct: 1, tense: "Present Simple" },
-            { question: "Choose the correct form: Look! The baby _____.", options: ["sleep", "sleeps", "is sleeping", "slept"], correct: 2, tense: "Present Progressive" },
-            { question: "Choose the correct form: She _____ her homework already.", options: ["finish", "finishes", "finished", "has finished"], correct: 3, tense: "Present Perfect" },
-            { question: "Choose the correct form: By next year, I _____ my degree.", options: ["will complete", "will have completed", "complete", "completing"], correct: 1, tense: "Future Perfect" },
-            { question: "Choose the correct form: If I _____ rich, I would travel the world.", options: ["am", "was", "were", "be"], correct: 2, tense: "Conditional" },
-            { question: "Choose the correct form: Water _____ at 100 degrees Celsius.", options: ["boil", "boils", "boiling", "boiled"], correct: 1, tense: "Present Simple" },
-            { question: "Choose the correct form: They _____ in this house since 2010.", options: ["live", "lived", "have lived", "living"], correct: 2, tense: "Present Perfect" },
-            { question: "Choose the correct form: While I _____, the phone rang.", options: ["cook", "cooked", "was cooking", "am cooking"], correct: 2, tense: "Past Progressive" },
-            { question: "Choose the correct form: I _____ never _____ such a beautiful sunset.", options: ["have...seen", "had...seen", "did...see", "am...seeing"], correct: 0, tense: "Present Perfect" },
-            { question: "Choose the correct form: By the time we arrived, the movie _____.", options: ["started", "had started", "starts", "starting"], correct: 1, tense: "Past Perfect" },
-        ];
-
-        const passiveExercises = [
-            { active: "The chef cooks the meal.", passive: "The meal is cooked by the chef." },
-            { active: "Tom writes a letter.", passive: "A letter is written by Tom." },
-            { active: "The children are eating the cake.", passive: "The cake is being eaten by the children." },
-            { active: "Someone stole my bike.", passive: "My bike was stolen by someone." },
-            { active: "The teacher was explaining the lesson.", passive: "The lesson was being explained by the teacher." },
-            { active: "They will build a new school.", passive: "A new school will be built by them." },
-            { active: "She has finished the project.", passive: "The project has been finished by her." },
-            { active: "The dog bit the man.", passive: "The man was bitten by the dog." },
-            { active: "We are watching a movie.", passive: "A movie is being watched by us." },
-            { active: "The company will launch a new product.", passive: "A new product will be launched by the company." },
-            { active: "My mother is baking a cake.", passive: "A cake is being baked by my mother." },
-            { active: "The students had completed the test.", passive: "The test had been completed by the students." },
-            { active: "Someone is cleaning the room.", passive: "The room is being cleaned by someone." },
-            { active: "They were repairing the road.", passive: "The road was being repaired by them." },
-            { active: "The police have arrested the thief.", passive: "The thief has been arrested by the police." },
-        ];
-
-        const passiveQuizQuestions = [
-            { question: "Convert to Passive: 'The boy kicks the ball.'", options: ["The ball is kicked by the boy.", "The ball kicked by the boy.", "The ball was kicked by the boy.", "The ball kicks by the boy."], correct: 0 },
-            { question: "Convert to Passive: 'She is singing a song.'", options: ["A song is sung by her.", "A song is being sung by her.", "A song was sung by her.", "A song sung by her."], correct: 1 },
-            { question: "Convert to Passive: 'They finished the work.'", options: ["The work is finished by them.", "The work was finished by them.", "The work has been finished by them.", "The work finished by them."], correct: 1 },
-            { question: "Convert to Passive: 'He will write the report.'", options: ["The report will be written by him.", "The report is written by him.", "The report was written by him.", "The report will written by him."], correct: 0 },
-            { question: "Convert to Passive: 'The cat is chasing the mouse.'", options: ["The mouse is chased by the cat.", "The mouse is being chased by the cat.", "The mouse was chased by the cat.", "The mouse chased by the cat."], correct: 1 },
-            { question: "Which sentence is in Passive Voice?", options: ["The dog bit the man.", "The man was bitten by the dog.", "The dog bites the man.", "The man bites the dog."], correct: 1 },
-            { question: "Convert to Active: 'The cake was eaten by the children.'", options: ["The children eat the cake.", "The children ate the cake.", "The children were eating the cake.", "The children had eaten the cake."], correct: 1 },
-            { question: "Convert to Passive: 'Someone has stolen my car.'", options: ["My car is stolen by someone.", "My car was stolen by someone.", "My car has been stolen by someone.", "My car stolen by someone."], correct: 2 },
-            { question: "Convert to Passive: 'They are building a house.'", options: ["A house is built by them.", "A house is being built by them.", "A house was built by them.", "A house built by them."], correct: 1 },
-            { question: "Convert to Passive: 'The teacher explained the lesson.'", options: ["The lesson is explained by the teacher.", "The lesson was explained by the teacher.", "The lesson has been explained by the teacher.", "The lesson explained by the teacher."], correct: 1 },
-            { question: "Which is the correct Passive form? 'The letter _____ by John.'", options: ["is written", "was written", "has written", "wrote"], correct: 1 },
-            { question: "Convert to Passive: 'She will clean the room.'", options: ["The room will be cleaned by her.", "The room is cleaned by her.", "The room was cleaned by her.", "The room will cleaned by her."], correct: 0 },
-            { question: "Convert to Active: 'The window was broken by the ball.'", options: ["The ball breaks the window.", "The ball broke the window.", "The ball is breaking the window.", "The ball had broken the window."], correct: 1 },
-            { question: "Convert to Passive: 'My mother is cooking dinner.'", options: ["Dinner is cooked by my mother.", "Dinner is being cooked by my mother.", "Dinner was cooked by my mother.", "Dinner has been cooked by my mother."], correct: 1 },
-            { question: "Identify: 'The book was read by many students.'", options: ["Active", "Passive", "Neither", "Both"], correct: 1 },
-        ];
-
-        const unseenTexts = [
-            {
-                title: "The Amazing World of Dolphins",
-                text: `Dolphins are some of the most intelligent animals on Earth. They live in oceans all around the world and are known for their friendly behavior towards humans. Dolphins can swim at speeds of up to 25 miles per hour and can hold their breath for up to 10 minutes underwater.
-
-Scientists have discovered that dolphins communicate with each other using a complex system of clicks and whistles. Each dolphin has its own unique whistle, similar to how humans have names. They also use echolocation to find food and navigate in the dark ocean waters.
-
-Dolphins are very social animals. They live in groups called pods, which can contain anywhere from a few dolphins to over a thousand. They work together to protect each other from predators like sharks. When a dolphin is sick or injured, other dolphins will help it reach the surface to breathe.
-
-Unfortunately, dolphins face many dangers today. Pollution, fishing nets, and habitat destruction threaten their survival. Many organizations are working hard to protect these amazing creatures and their ocean homes.`,
-                questions: [
-                    { question: "How fast can dolphins swim?", options: ["10 miles per hour", "15 miles per hour", "25 miles per hour", "50 miles per hour"], correct: 2 },
-                    { question: "How do dolphins communicate?", options: ["By singing songs", "Using clicks and whistles", "By writing messages", "Through body language only"], correct: 1 },
-                    { question: "What is a group of dolphins called?", options: ["A herd", "A flock", "A pod", "A school"], correct: 2 },
-                    { question: "What do dolphins use to find food in dark waters?", options: ["Their eyes", "Echolocation", "Their sense of smell", "Special lights"], correct: 1 },
-                    { question: "What threatens dolphins today?", options: ["Only sharks", "Pollution and fishing nets", "Too much food", "Cold weather"], correct: 1 },
-                ]
-            },
-            {
-                title: "The History of Chocolate",
-                text: `Chocolate has a long and fascinating history that dates back over 3,000 years. The ancient Mayans and Aztecs in Central America were the first people to discover chocolate. They made a bitter drink from cacao beans and believed it had magical powers. The Aztec emperor Montezuma was said to drink 50 cups of chocolate every day!
-
-When Spanish explorers arrived in the Americas in the 1500s, they brought cacao beans back to Europe. At first, chocolate was only available to royalty and the very wealthy because it was so expensive. It wasn't until the 1800s that chocolate became affordable for ordinary people.
-
-In 1847, a British company called Fry's created the first solid chocolate bar. Before that, chocolate was only consumed as a drink. Later, milk chocolate was invented by adding milk powder to the recipe. Today, Switzerland is famous for producing some of the world's finest chocolate.
-
-Modern chocolate production is a huge industry. Millions of people around the world work in cacao farming, and chocolate is one of the most popular treats globally. However, there are concerns about fair wages for cacao farmers and child labor in some producing countries.`,
-                questions: [
-                    { question: "Who were the first people to discover chocolate?", options: ["The Spanish", "The British", "The Mayans and Aztecs", "The Swiss"], correct: 2 },
-                    { question: "What did the Aztecs believe about chocolate?", options: ["It was poisonous", "It had magical powers", "It was only for children", "It was too sweet"], correct: 1 },
-                    { question: "When was the first solid chocolate bar created?", options: ["1500s", "1600s", "1700s", "1847"], correct: 3 },
-                    { question: "Which country is famous for fine chocolate today?", options: ["Spain", "Britain", "Switzerland", "Mexico"], correct: 2 },
-                    { question: "What modern concern is mentioned about chocolate production?", options: ["It tastes too sweet", "Fair wages and child labor", "There is too much chocolate", "It is too expensive"], correct: 1 },
-                ]
-            },
-            {
-                title: "The Benefits of Reading",
-                text: `Reading is one of the most important skills a person can develop. Studies have shown that people who read regularly have better memory, stronger analytical skills, and improved focus and concentration. Reading is like exercise for the brain - the more you do it, the stronger your mind becomes.
-
-One of the greatest benefits of reading is that it expands your vocabulary. When you read books, newspapers, or articles, you encounter new words in context. This helps you understand their meaning naturally, without having to memorize definitions from a dictionary. People who read a lot tend to be better writers and communicators.
-
-Reading also reduces stress. Research from the University of Sussex found that reading for just six minutes can reduce stress levels by up to 68 percent. This is more effective than listening to music or taking a walk. When you read a good book, you can escape from your daily worries and enter a different world.
-
-Furthermore, reading improves empathy. When you read about characters from different backgrounds and cultures, you learn to understand perspectives other than your own. This makes you more understanding and open-minded in real life. Fiction readers, in particular, score higher on tests of social awareness and empathy.
-
-In today's digital age, many people spend hours looking at screens. While technology has its benefits, making time for reading physical books or e-books is essential for mental health and personal growth.`,
-                questions: [
-                    { question: "According to the text, what is reading compared to?", options: ["A vacation", "Exercise for the brain", "A hobby", "A waste of time"], correct: 1 },
-                    { question: "How much can reading reduce stress levels?", options: ["10 percent", "30 percent", "50 percent", "68 percent"], correct: 3 },
-                    { question: "What does reading help expand?", options: ["Physical strength", "Vocabulary", "Height", "Appetite"], correct: 1 },
-                    { question: "Which readers score higher on empathy tests?", options: ["Newspaper readers", "Fiction readers", "Magazine readers", "Comic book readers"], correct: 1 },
-                    { question: "What is the main idea of the text?", options: ["Reading is boring", "Reading is expensive", "Reading has many benefits", "Reading is difficult"], correct: 2 },
-                ]
-            }
-        ];
-
-        const writingTopics = [
-            {
-                type: "Descriptive Paragraph",
-                title: "Describe Your Favorite Place",
-                instructions: [
-                    "Write a descriptive paragraph in Present Simple",
-                    "Describe your favorite place (room, park, beach, etc.)",
-                    "Use adjectives to describe what you see, hear, and feel",
-                    "Write at least 80 words",
-                    "Use the following words: beautiful, peaceful, relaxing, enjoy, favorite"
-                ],
-                time: 15
-            },
-            {
-                type: "Opinion Essay",
-                title: "Should Students Wear School Uniforms?",
-                instructions: [
-                    "Write an opinion essay about school uniforms",
-                    "Include an introduction, body paragraphs, and conclusion",
-                    "Give at least 2 reasons for your opinion",
-                    "Write at least 100 words",
-                    "Use connectors: First, Second, In addition, However, In conclusion"
-                ],
-                time: 20
-            },
-            {
-                type: "Story",
-                title: "An Unforgettable Day",
-                instructions: [
-                    "Write a story in Past Simple",
-                    "Describe an unforgettable day you had",
-                    "Use time expressions: yesterday, last week, suddenly, then, finally",
-                    "Write at least 80 words",
-                    "Include at least 5 verbs in Past Simple"
-                ],
-                time: 15
-            }
-        ];
-
-        const sentenceBuilderExercises = [
-            {
-                instruction: "בנה משפט ב-Present Simple: 'הם משחקים כדורגל כל יום'",
-                words: ["They", "play", "football", "every", "day", "."],
-                correct: ["They", "play", "football", "every", "day", "."]
-            },
-            {
-                instruction: "בנה משפט ב-Present Progressive: 'היא צופה בטלוויזיה עכשיו'",
-                words: ["She", "is", "watching", "TV", "now", "."],
-                correct: ["She", "is", "watching", "TV", "now", "."]
-            },
-            {
-                instruction: "בנה משפט ב-Past Simple: 'אני אכלתי פיצה אתמול'",
-                words: ["I", "ate", "pizza", "yesterday", "."],
-                correct: ["I", "ate", "pizza", "yesterday", "."]
-            },
-            {
-                instruction: "בנה משפט ב-Future Simple: 'הם יבואו מחר'",
-                words: ["They", "will", "come", "tomorrow", "."],
-                correct: ["They", "will", "come", "tomorrow", "."]
-            },
-            {
-                instruction: "בנה משפט ב-Passive: 'העוגה נאפתה על ידי אמא'",
-                words: ["The", "cake", "was", "baked", "by", "mom", "."],
-                correct: ["The", "cake", "was", "baked", "by", "mom", "."]
-            }
-        ];
-
-        // ===================== STATE =====================
-        let currentCard = 0;
-        let knownWords = new Set();
-        let currentVocabQuiz = 0;
-        let vocabQuizScore = 0;
-        let currentGrammarQuiz = 0;
-        let grammarQuizScore = 0;
-        let currentPassive = 0;
-        let currentPassiveQuiz = 0;
-        let passiveQuizScore = 0;
-        let currentUnseen = 0;
-        let unseenAnswers = {};
-        let currentSentenceBuilder = 0;
-        let builtSentence = [];
-        let matchScore = 0;
-        let selectedMatch = null;
-        let matchedPairs = new Set();
-        let timerInterval = null;
-        let timerSeconds = 0;
-        let streak = 0;
-        let totalAnswered = 0;
-        let totalCorrect = 0;
-
-        // ===================== INIT =====================
-        function init() {
-            loadProgress();
-            updateStats();
-            updateWordOfDay();
-            renderVocabList();
-            renderUnseen(0);
-            renderWriting(0);
-            renderActivityCalendar();
-            updateDashboard();
-        }
-
-        // ===================== NAVIGATION =====================
-        function showSection(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            event.target.closest('.nav-btn').classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // ===================== VOCABULARY =====================
-        function showVocabMode(mode) {
-            document.querySelectorAll('.vocab-mode').forEach(m => m.style.display = 'none');
-            document.getElementById('vocab-' + mode).style.display = 'block';
-            document.querySelectorAll('#vocabulary .filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if (mode === 'match') initMatchGame();
-        }
-
-        function flipCard() {
-            document.getElementById('flashcard').classList.toggle('flipped');
-        }
-
-        function nextCard() {
-            currentCard = (currentCard + 1) % vocabulary.length;
-            updateCard();
-        }
-
-        function prevCard() {
-            currentCard = (currentCard - 1 + vocabulary.length) % vocabulary.length;
-            updateCard();
-        }
-
-        function updateCard() {
-            const card = document.getElementById('flashcard');
-            card.classList.remove('flipped');
-            setTimeout(() => {
-                document.getElementById('fc-word').textContent = vocabulary[currentCard].word;
-                document.getElementById('fc-meaning').textContent = vocabulary[currentCard].meaning;
-                document.getElementById('fc-sentence').textContent = '"' + vocabulary[currentCard].sentence + '"';
-                document.getElementById('fc-current').textContent = currentCard + 1;
-                document.getElementById('fc-total').textContent = vocabulary.length;
-            }, 300);
-        }
-
-        function markKnown() {
-            knownWords.add(currentCard);
-            saveProgress();
-            nextCard();
-            updateProgressBar('vocab', knownWords.size / vocabulary.length * 100);
-        }
-
-        function markUnknown() {
-            nextCard();
-        }
-
-        function renderVocabList() {
-            const container = document.getElementById('vocab-list-container');
-            container.innerHTML = vocabulary.map((v, i) => `
-                <div class="vocab-item" onclick="speak('${v.word}')">
-                    <div class="vocab-number">${i + 1}</div>
-                    <div class="vocab-content">
-                        <div class="vocab-word">${v.word}</div>
-                        <div class="vocab-meaning">${v.meaning}</div>
-                        <div class="vocab-sentence">"${v.sentence}"</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function speak(word) {
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(word);
-                utterance.lang = 'en-US';
-                speechSynthesis.speak(utterance);
-            }
-        }
-
-        // Vocab Quiz
-        let currentVocabQuizQ = 0;
-        let vocabQuizQuestions = [];
-
-        function generateVocabQuiz() {
-            vocabQuizQuestions = [];
-            const used = new Set();
-            while (vocabQuizQuestions.length < 20 && used.size < vocabulary.length) {
-                const idx = Math.floor(Math.random() * vocabulary.length);
-                if (used.has(idx)) continue;
-                used.add(idx);
-                const correct = vocabulary[idx];
-                const wrongOptions = vocabulary.filter((v, i) => i !== idx).sort(() => 0.5 - Math.random()).slice(0, 3);
-                const options = [correct, ...wrongOptions].sort(() => 0.5 - Math.random());
-                vocabQuizQuestions.push({
-                    word: correct.word,
-                    correct: options.indexOf(correct),
-                    options: options.map(o => o.meaning)
-                });
-            }
-        }
-
-        function showVocabQuiz() {
-            if (vocabQuizQuestions.length === 0) generateVocabQuiz();
-            const q = vocabQuizQuestions[currentVocabQuizQ];
-            document.getElementById('vq-current').textContent = currentVocabQuizQ + 1;
-            document.getElementById('vq-total').textContent = vocabQuizQuestions.length;
-            document.getElementById('vq-score').textContent = vocabQuizScore;
-            document.getElementById('vq-question').textContent = `מה הפירוש של "${q.word}"?`;
-            document.getElementById('vq-progress').style.width = ((currentVocabQuizQ + 1) / vocabQuizQuestions.length * 100) + '%';
-            
-            const optsContainer = document.getElementById('vq-options');
-            optsContainer.innerHTML = q.options.map((opt, i) => 
-                `<div class="quiz-option" onclick="selectVocabAnswer(${i})" data-idx="${i}">${opt}</div>`
-            ).join('');
-            document.getElementById('vq-feedback').className = 'quiz-feedback';
-            document.getElementById('vq-feedback').style.display = 'none';
-        }
-
-        function selectVocabAnswer(idx) {
-            const q = vocabQuizQuestions[currentVocabQuizQ];
-            const options = document.querySelectorAll('#vq-options .quiz-option');
-            options.forEach(o => o.classList.add('disabled'));
-            
-            totalAnswered++;
-            if (idx === q.correct) {
-                options[idx].classList.add('correct');
-                vocabQuizScore += 5;
-                streak++;
-                totalCorrect++;
-                document.getElementById('vq-feedback').textContent = '✅ נכון! מעולה!';
-                document.getElementById('vq-feedback').className = 'quiz-feedback correct show';
-            } else {
-                options[idx].classList.add('wrong');
-                options[q.correct].classList.add('correct');
-                streak = 0;
-                document.getElementById('vq-feedback').textContent = '❌ לא נכון. התשובה הנכונה היא: ' + q.options[q.correct];
-                document.getElementById('vq-feedback').className = 'quiz-feedback wrong show';
-            }
-            updateStats();
-            saveProgress();
-        }
-
-        function nextVocabQuestion() {
-            currentVocabQuizQ++;
-            if (currentVocabQuizQ >= vocabQuizQuestions.length) {
-                showScorePopup(vocabQuizScore, vocabQuizQuestions.length * 5, 'חידון אוצר מילים');
-                currentVocabQuizQ = 0;
-                vocabQuizScore = 0;
-                generateVocabQuiz();
-            }
-            showVocabQuiz();
-        }
-
-        // Match Game
-        function initMatchGame() {
-            const container = document.getElementById('match-game');
-            const selected = vocabulary.sort(() => 0.5 - Math.random()).slice(0, 8);
-            const words = selected.map((v, i) => ({ type: 'word', text: v.word, id: i, pair: i }));
-            const meanings = selected.map((v, i) => ({ type: 'meaning', text: v.meaning, id: i + 8, pair: i }));
-            const allItems = [...words, ...meanings].sort(() => 0.5 - Math.random());
-            
-            container.innerHTML = allItems.map(item => `
-                <div class="match-item" onclick="selectMatch(this, ${item.pair}, '${item.type}')" data-pair="${item.pair}" data-type="${item.type}">
-                    ${item.text}
-                </div>
-            `).join('');
-            
-            matchScore = 0;
-            selectedMatch = null;
-            matchedPairs = new Set();
-            document.getElementById('match-score').textContent = '0';
-        }
-
-        function selectMatch(el, pair, type) {
-            if (matchedPairs.has(pair) || el.classList.contains('selected')) return;
-            
-            if (!selectedMatch) {
-                selectedMatch = { el, pair, type };
-                el.classList.add('selected');
-            } else {
-                if (selectedMatch.type === type) {
-                    el.classList.add('wrong');
-                    selectedMatch.el.classList.add('wrong');
-                    setTimeout(() => {
-                        el.classList.remove('wrong', 'selected');
-                        selectedMatch.el.classList.remove('wrong', 'selected');
-                        selectedMatch = null;
-                    }, 500);
-                    streak = 0;
-                    updateStats();
-                } else if (selectedMatch.pair === pair) {
-                    el.classList.add('matched');
-                    selectedMatch.el.classList.add('matched');
-                    matchedPairs.add(pair);
-                    matchScore += 10;
-                    streak++;
-                    totalCorrect++;
-                    totalAnswered++;
-                    document.getElementById('match-score').textContent = matchScore;
-                    selectedMatch = null;
-                    updateStats();
-                    saveProgress();
-                    
-                    if (matchedPairs.size === 8) {
-                        setTimeout(() => {
-                            showScorePopup(matchScore, 80, 'משחק התאמה');
-                            initMatchGame();
-                        }, 500);
-                    }
-                } else {
-                    el.classList.add('wrong');
-                    selectedMatch.el.classList.add('wrong');
-                    setTimeout(() => {
-                        el.classList.remove('wrong', 'selected');
-                        selectedMatch.el.classList.remove('wrong', 'selected');
-                        selectedMatch = null;
-                    }, 500);
-                    streak = 0;
-                    updateStats();
-                }
-            }
-        }
-
-        // ===================== GRAMMAR =====================
-        function showGrammarMode(mode) {
-            document.querySelectorAll('.grammar-mode').forEach(m => m.style.display = 'none');
-            document.getElementById('grammar-' + mode).style.display = 'block';
-            document.querySelectorAll('#grammar .filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if (mode === 'quiz') showGrammarQuiz();
-            if (mode === 'sentence-builder') showSentenceBuilder();
-        }
-
-        let currentGQ = 0;
-        let gqQuestions = [];
-
-        function generateGrammarQuiz() {
-            gqQuestions = [...grammarQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
-        }
-
-        function showGrammarQuiz() {
-            if (gqQuestions.length === 0) generateGrammarQuiz();
-            const q = gqQuestions[currentGQ];
-            document.getElementById('gq-current').textContent = currentGQ + 1;
-            document.getElementById('gq-total').textContent = gqQuestions.length;
-            document.getElementById('gq-score').textContent = grammarQuizScore;
-            document.getElementById('gq-question').innerHTML = q.question + '<br><small style="color:var(--primary);">(' + q.tense + ')</small>';
-            document.getElementById('gq-progress').style.width = ((currentGQ + 1) / gqQuestions.length * 100) + '%';
-            
-            const opts = document.getElementById('gq-options');
-            opts.innerHTML = q.options.map((opt, i) => 
-                `<div class="quiz-option" onclick="selectGrammarAnswer(${i})">${opt}</div>`
-            ).join('');
-            document.getElementById('gq-feedback').className = 'quiz-feedback';
-            document.getElementById('gq-feedback').style.display = 'none';
-        }
-
-        function selectGrammarAnswer(idx) {
-            const q = gqQuestions[currentGQ];
-            const options = document.querySelectorAll('#gq-options .quiz-option');
-            options.forEach(o => o.classList.add('disabled'));
-            
-            totalAnswered++;
-            if (idx === q.correct) {
-                options[idx].classList.add('correct');
-                grammarQuizScore += 5;
-                streak++;
-                totalCorrect++;
-                document.getElementById('gq-feedback').textContent = '✅ נכון! ' + q.tense;
-                document.getElementById('gq-feedback').className = 'quiz-feedback correct show';
-            } else {
-                options[idx].classList.add('wrong');
-                options[q.correct].classList.add('correct');
-                streak = 0;
-                document.getElementById('gq-feedback').textContent = '❌ לא נכון. התשובה: ' + q.options[q.correct];
-                document.getElementById('gq-feedback').className = 'quiz-feedback wrong show';
-            }
-            updateStats();
-            saveProgress();
-        }
-
-        function nextGrammarQuestion() {
-            currentGQ++;
-            if (currentGQ >= gqQuestions.length) {
-                showScorePopup(grammarQuizScore, gqQuestions.length * 5, 'חידון דקדוק');
-                currentGQ = 0;
-                grammarQuizScore = 0;
-                generateGrammarQuiz();
-            }
-            showGrammarQuiz();
-        }
-
-        // Sentence Builder
-        function showSentenceBuilder() {
-            const ex = sentenceBuilderExercises[currentSentenceBuilder];
-            document.getElementById('sb-instruction').textContent = ex.instruction;
-            document.getElementById('sentence-target').innerHTML = '';
-            builtSentence = [];
-            
-            const wordsContainer = document.getElementById('sentence-words');
-            wordsContainer.innerHTML = ex.words.map((word, i) => 
-                `<span class="word-chip" onclick="addWordToSentence(${i}, '${word}')" id="word-${i}">${word}</span>`
-            ).join('');
-            
-            document.getElementById('sb-feedback').style.display = 'none';
-        }
-
-        function addWordToSentence(idx, word) {
-            const chip = document.getElementById('word-' + idx);
-            if (chip.classList.contains('used')) return;
-            
-            builtSentence.push(word);
-            chip.classList.add('used');
-            
-            const target = document.getElementById('sentence-target');
-            target.innerHTML = builtSentence.map(w => `<span class="word-chip">${w}</span>`).join('');
-        }
-
-        function resetSentence() {
-            builtSentence = [];
-            document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('used'));
-            document.getElementById('sentence-target').innerHTML = '';
-            document.getElementById('sb-feedback').style.display = 'none';
-        }
-
-        function checkSentence() {
-            const ex = sentenceBuilderExercises[currentSentenceBuilder];
-            const built = builtSentence.join(' ');
-            const correct = ex.correct.join(' ');
-            
-            const feedback = document.getElementById('sb-feedback');
-            if (built === correct) {
-                feedback.textContent = '✅ נכון! מעולה!';
-                feedback.className = 'correct';
-                feedback.style.background = 'rgba(16, 185, 129, 0.1)';
-                feedback.style.color = 'var(--success)';
-                streak++;
-                totalCorrect++;
-                totalAnswered++;
-                grammarQuizScore += 10;
-                updateStats();
-                saveProgress();
-            } else {
-                feedback.textContent = '❌ לא נכון. המשפט הנכון: ' + correct;
-                feedback.className = 'wrong';
-                feedback.style.background = 'rgba(239, 68, 68, 0.1)';
-                feedback.style.color = 'var(--danger)';
-                streak = 0;
-                updateStats();
-            }
-            feedback.style.display = 'block';
-        }
-
-        function nextSentence() {
-            currentSentenceBuilder = (currentSentenceBuilder + 1) % sentenceBuilderExercises.length;
-            showSentenceBuilder();
-        }
-
-        // ===================== PASSIVE VOICE =====================
-        function showPassiveMode(mode) {
-            document.querySelectorAll('.passive-mode').forEach(m => m.style.display = 'none');
-            document.getElementById('passive-' + mode).style.display = 'block';
-            document.querySelectorAll('#passive .toggle-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if (mode === 'quiz') showPassiveQuiz();
-        }
-
-        function checkPassive() {
-            const ex = passiveExercises[currentPassive];
-            const input = document.getElementById('pv-input').value.trim().toLowerCase();
-            const correct = ex.passive.toLowerCase();
-            const feedback = document.getElementById('pv-feedback');
-            
-            totalAnswered++;
-            if (input === correct || input.replace(/\s+/g, ' ') === correct.replace(/\s+/g, ' ')) {
-                document.getElementById('pv-input').className = 'exercise-input correct';
-                feedback.textContent = '✅ נכון! מעולה!';
-                feedback.className = 'correct';
-                feedback.style.background = 'rgba(16, 185, 129, 0.1)';
-                feedback.style.color = 'var(--success)';
-                streak++;
-                totalCorrect++;
-                passiveQuizScore += 10;
-            } else {
-                document.getElementById('pv-input').className = 'exercise-input wrong';
-                feedback.textContent = '❌ לא נכון. התשובה: ' + ex.passive;
-                feedback.className = 'wrong';
-                feedback.style.background = 'rgba(239, 68, 68, 0.1)';
-                feedback.style.color = 'var(--danger)';
-                streak = 0;
-            }
-            feedback.style.display = 'block';
-            updateStats();
-            saveProgress();
-        }
-
-        function showPassiveHint() {
-            const ex = passiveExercises[currentPassive];
-            const parts = ex.passive.split(' ');
-            const hint = parts.slice(0, 2).join(' ') + ' ...';
-            alert('רמז: ' + hint);
-        }
-
-        function nextPassive() {
-            currentPassive = (currentPassive + 1) % passiveExercises.length;
-            document.getElementById('pv-active').textContent = passiveExercises[currentPassive].active;
-            document.getElementById('pv-input').value = '';
-            document.getElementById('pv-input').className = 'exercise-input';
-            document.getElementById('pv-feedback').style.display = 'none';
-        }
-
-        function checkPassive2() {
-            const ex = passiveExercises[currentPassive];
-            const input = document.getElementById('pv-input2').value.trim().toLowerCase();
-            const correct = ex.active.toLowerCase();
-            const feedback = document.getElementById('pv-feedback2');
-            
-            totalAnswered++;
-            if (input === correct || input.replace(/\s+/g, ' ') === correct.replace(/\s+/g, ' ')) {
-                document.getElementById('pv-input2').className = 'exercise-input correct';
-                feedback.textContent = '✅ נכון! מעולה!';
-                feedback.className = 'correct';
-                feedback.style.background = 'rgba(16, 185, 129, 0.1)';
-                feedback.style.color = 'var(--success)';
-                streak++;
-                totalCorrect++;
-                passiveQuizScore += 10;
-            } else {
-                document.getElementById('pv-input2').className = 'exercise-input wrong';
-                feedback.textContent = '❌ לא נכון. התשובה: ' + ex.active;
-                feedback.className = 'wrong';
-                feedback.style.background = 'rgba(239, 68, 68, 0.1)';
-                feedback.style.color = 'var(--danger)';
-                streak = 0;
-            }
-            feedback.style.display = 'block';
-            updateStats();
-            saveProgress();
-        }
-
-        function nextPassive2() {
-            currentPassive = (currentPassive + 1) % passiveExercises.length;
-            document.getElementById('pv-passive').textContent = passiveExercises[currentPassive].passive;
-            document.getElementById('pv-input2').value = '';
-            document.getElementById('pv-input2').className = 'exercise-input';
-            document.getElementById('pv-feedback2').style.display = 'none';
-        }
-
-        let currentPQ = 0;
-        let pqQuestions = [];
-
-        function generatePassiveQuiz() {
-            pqQuestions = [...passiveQuizQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
-        }
-
-        function showPassiveQuiz() {
-            if (pqQuestions.length === 0) generatePassiveQuiz();
-            const q = pqQuestions[currentPQ];
-            document.getElementById('pq-current').textContent = currentPQ + 1;
-            document.getElementById('pq-total').textContent = pqQuestions.length;
-            document.getElementById('pq-score').textContent = passiveQuizScore;
-            document.getElementById('pq-question').textContent = q.question;
-            document.getElementById('pq-progress').style.width = ((currentPQ + 1) / pqQuestions.length * 100) + '%';
-            
-            const opts = document.getElementById('pq-options');
-            opts.innerHTML = q.options.map((opt, i) => 
-                `<div class="quiz-option" onclick="selectPassiveAnswer(${i})">${opt}</div>`
-            ).join('');
-            document.getElementById('pq-feedback').className = 'quiz-feedback';
-            document.getElementById('pq-feedback').style.display = 'none';
-        }
-
-        function selectPassiveAnswer(idx) {
-            const q = pqQuestions[currentPQ];
-            const options = document.querySelectorAll('#pq-options .quiz-option');
-            options.forEach(o => o.classList.add('disabled'));
-            
-            totalAnswered++;
-            if (idx === q.correct) {
-                options[idx].classList.add('correct');
-                passiveQuizScore += 5;
-                streak++;
-                totalCorrect++;
-                document.getElementById('pq-feedback').textContent = '✅ נכון!';
-                document.getElementById('pq-feedback').className = 'quiz-feedback correct show';
-            } else {
-                options[idx].classList.add('wrong');
-                options[q.correct].classList.add('correct');
-                streak = 0;
-                document.getElementById('pq-feedback').textContent = '❌ לא נכון. התשובה: ' + q.options[q.correct];
-                document.getElementById('pq-feedback').className = 'quiz-feedback wrong show';
-            }
-            updateStats();
-            saveProgress();
-        }
-
-        function nextPassiveQuestion() {
-            currentPQ++;
-            if (currentPQ >= pqQuestions.length) {
-                showScorePopup(passiveQuizScore, pqQuestions.length * 5, 'חידון Passive');
-                currentPQ = 0;
-                passiveQuizScore = 0;
-                generatePassiveQuiz();
-            }
-            showPassiveQuiz();
-        }
-
-        // ===================== UNSEEN =====================
-        function showUnseen(idx) {
-            currentUnseen = idx;
-            unseenAnswers = {};
-            renderUnseen(idx);
-            document.querySelectorAll('#unseen .filter-btn').forEach((b, i) => {
-                b.classList.toggle('active', i === idx);
-            });
-        }
-
-        function renderUnseen(idx) {
-            const text = unseenTexts[idx];
-            document.getElementById('unseen-text').innerHTML = `
-                <h2 style="font-family:'Poppins',sans-serif; margin-bottom:1rem; color:var(--primary);">${text.title}</h2>
-                ${text.text.split('\n\n').map(p => `<p>${p}</p>`).join('')}
-            `;
-            
-            document.getElementById('unseen-questions').innerHTML = text.questions.map((q, qi) => `
-                <div class="question-card">
-                    <div class="question-text">${qi + 1}. ${q.question}</div>
-                    <div class="question-answers">
-                        ${q.options.map((opt, oi) => `
-                            <div class="answer-option" onclick="selectUnseenAnswer(${qi}, ${oi})" data-q="${qi}" data-a="${oi}">
-                                <div class="answer-letter">${String.fromCharCode(65 + oi)}</div>
-                                <div>${opt}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function selectUnseenAnswer(qIdx, aIdx) {
-            unseenAnswers[qIdx] = aIdx;
-            document.querySelectorAll(`[data-q="${qIdx}"]`).forEach(el => el.classList.remove('selected'));
-            document.querySelector(`[data-q="${qIdx}"][data-a="${aIdx}"]`).classList.add('selected');
-        }
-
-        function checkUnseen() {
-            const text = unseenTexts[currentUnseen];
-            let correct = 0;
-            text.questions.forEach((q, qi) => {
-                const selected = unseenAnswers[qi];
-                document.querySelectorAll(`[data-q="${qi}"]`).forEach(el => {
-                    el.classList.remove('correct', 'wrong');
-                    const aIdx = parseInt(el.dataset.a);
-                    if (aIdx === q.correct) el.classList.add('correct');
-                    else if (aIdx === selected && selected !== q.correct) el.classList.add('wrong');
-                });
-                if (selected === q.correct) correct++;
-            });
-            
-            totalAnswered += text.questions.length;
-            totalCorrect += correct;
-            streak = correct === text.questions.length ? streak + 1 : 0;
-            updateStats();
-            saveProgress();
-            
-            alert(`תוצאות: ${correct}/${text.questions.length} נכונות!`);
-        }
-
-        function showUnseenScore() {
-            const text = unseenTexts[currentUnseen];
-            let correct = 0;
-            text.questions.forEach((q, qi) => {
-                if (unseenAnswers[qi] === q.correct) correct++;
-            });
-            showScorePopup(correct * 20, text.questions.length * 20, 'Unseen Comprehension');
-        }
-
-        // ===================== WRITING =====================
-        function showWritingTopic(idx) {
-            renderWriting(idx);
-            document.querySelectorAll('#writing .filter-btn').forEach((b, i) => {
-                b.classList.toggle('active', i === idx);
-            });
-        }
-
-        function renderWriting(idx) {
-            const topic = writingTopics[idx];
-            document.getElementById('writing-prompt').innerHTML = `
-                <h3>${topic.type}: ${topic.title}</h3>
-                <ul>
-                    ${topic.instructions.map(inst => `<li>${inst}</li>`).join('')}
-                </ul>
-            `;
-            timerSeconds = topic.time * 60;
-            updateTimerDisplay();
-        }
-
-        function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                timerSeconds--;
-                updateTimerDisplay();
-                if (timerSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    alert('הזמן נגמר!');
-                }
-            }, 1000);
-        }
-
-        function resetTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            timerSeconds = 15 * 60;
-            updateTimerDisplay();
-        }
-
-        function updateTimerDisplay() {
-            const m = Math.floor(timerSeconds / 60);
-            const s = timerSeconds % 60;
-            document.getElementById('timer').textContent = 
-                `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-
-        function countWords() {
-            const text = document.getElementById('writing-area').value.trim();
-            const words = text.split(/\s+/).filter(w => w.length > 0);
-            document.getElementById('word-count').textContent = `מספר מילים: ${words.length}`;
-        }
-
-        function saveWriting() {
-            const text = document.getElementById('writing-area').value;
-            localStorage.setItem('writing_' + Date.now(), text);
-            alert('הכתיבה נשמרה!');
-            saveProgress();
-        }
-
-        // ===================== GAMES =====================
-        function startMemoryGame() {
-            const area = document.getElementById('game-area');
-            area.innerHTML = '<div style="text-align:center; color:white; padding:2rem;"><h3>🧠 משחק זיכרון</h3><p>עבור לאוצר מילים → משחק התאמה!</p></div>';
-            showSection('vocabulary');
-            showVocabMode('match');
-        }
-
-        function startSpeedGame() {
-            const area = document.getElementById('game-area');
-            let score = 0;
-            let timeLeft = 60;
-            let currentWord = 0;
-            const words = [...vocabulary].sort(() => 0.5 - Math.random()).slice(0, 20);
-            
-            area.innerHTML = `
-                <div style="background:var(--card-bg); border-radius:24px; padding:2rem; text-align:center; max-width:600px; margin:0 auto;">
-                    <h3>⚡ משחק מהירות</h3>
-                    <div style="font-size:3rem; font-weight:800; color:var(--primary); margin:1rem 0;" id="speed-word">${words[0].word}</div>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1rem 0;" id="speed-options"></div>
-                    <div style="font-size:1.5rem; font-weight:700;" id="speed-timer">60</div>
-                    <div style="font-size:1.2rem;" id="speed-score">נקודות: 0</div>
-                </div>
-            `;
-            
-            function showSpeedQuestion() {
-                if (currentWord >= words.length || timeLeft <= 0) {
-                    endSpeedGame(score);
-                    return;
-                }
-                const w = words[currentWord];
-                document.getElementById('speed-word').textContent = w.word;
-                const wrong = vocabulary.filter(v => v.word !== w.word).sort(() => 0.5 - Math.random()).slice(0, 3);
-                const opts = [w, ...wrong].sort(() => 0.5 - Math.random());
-                document.getElementById('speed-options').innerHTML = opts.map((o, i) => 
-                    `<button class="btn btn-secondary" style="width:100%;" onclick="window.checkSpeed(${i}, ${opts.indexOf(w)})">${o.meaning}</button>`
-                ).join('');
-            }
-            
-            window.checkSpeed = function(idx, correct) {
-                if (idx === correct) {
-                    score += 5;
-                    streak++;
-                    totalCorrect++;
-                } else {
-                    streak = 0;
-                }
-                totalAnswered++;
-                currentWord++;
-                document.getElementById('speed-score').textContent = 'נקודות: ' + score;
-                updateStats();
-                showSpeedQuestion();
-            };
-            
-            const timer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('speed-timer').textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    endSpeedGame(score);
-                }
-            }, 1000);
-            
-            showSpeedQuestion();
-        }
-
-        function endSpeedGame(score) {
-            showScorePopup(score, 100, 'משחק מהירות');
-            saveProgress();
-        }
-
-        function startHangman() {
-            const area = document.getElementById('game-area');
-            const word = vocabulary[Math.floor(Math.random() * vocabulary.length)].word.toUpperCase();
-            let guessed = new Set();
-            let wrong = 0;
-            const maxWrong = 6;
-            
-            area.innerHTML = `
-                <div style="background:var(--card-bg); border-radius:24px; padding:2rem; text-align:center; max-width:600px; margin:0 auto;">
-                    <h3>🎯 Hangman</h3>
-                    <div style="font-size:2rem; font-family:monospace; letter-spacing:0.5rem; margin:1rem 0;" id="hangman-word"></div>
-                    <div style="font-size:1.5rem; color:var(--danger); margin:1rem 0;" id="hangman-status">טעויות: 0/6</div>
-                    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin:1rem 0;" id="hangman-letters"></div>
-                    <div id="hangman-result"></div>
-                </div>
-            `;
-            
-            function updateHangman() {
-                const display = word.split('').map(c => guessed.has(c) ? c : '_').join(' ');
-                document.getElementById('hangman-word').textContent = display;
-                document.getElementById('hangman-status').textContent = 'טעויות: ' + wrong + '/' + maxWrong;
-                
-                if (!display.includes('_')) {
-                    document.getElementById('hangman-result').innerHTML = '<div style="color:var(--success); font-size:1.5rem; font-weight:700;">🎉 ניצחת!</div>';
-                    streak++;
-                    totalCorrect++;
-                    totalAnswered++;
-                    updateStats();
-                    saveProgress();
-                } else if (wrong >= maxWrong) {
-                    document.getElementById('hangman-result').innerHTML = '<div style="color:var(--danger); font-size:1.5rem; font-weight:700;">💀 המילה הייתה: ' + word + '</div>';
-                    streak = 0;
-                    updateStats();
-                }
-            }
-            
-            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            document.getElementById('hangman-letters').innerHTML = letters.split('').map(c => 
-                `<button class="btn btn-secondary" style="padding:0.5rem 1rem;" onclick="window.guessLetter('${c}')">${c}</button>`
-            ).join('');
-            
-            window.guessLetter = function(c) {
-                if (guessed.has(c)) return;
-                guessed.add(c);
-                if (!word.includes(c)) wrong++;
-                updateHangman();
-            };
-            
-            updateHangman();
-        }
-
-        function startScramble() {
-            const area = document.getElementById('game-area');
-            const v = vocabulary[Math.floor(Math.random() * vocabulary.length)];
-            const scrambled = v.word.split('').sort(() => 0.5 - Math.random()).join('');
-            
-            area.innerHTML = `
-                <div style="background:var(--card-bg); border-radius:24px; padding:2rem; text-align:center; max-width:600px; margin:0 auto;">
-                    <h3>🔄 מילים מעורבבות</h3>
-                    <div style="font-size:0.9rem; color:#64748b; margin-bottom:1rem;">רמז: ${v.meaning}</div>
-                    <div style="font-size:2.5rem; font-family:monospace; letter-spacing:0.5rem; font-weight:700; color:var(--primary); margin:1rem 0;" id="scrambled-word">${scrambled}</div>
-                    <input type="text" class="exercise-input" id="scramble-input" placeholder="הקלד את המילה הנכונה..." style="text-align:center; font-size:1.5rem;">
-                    <div style="margin-top:1rem;">
-                        <button class="btn btn-primary" onclick="window.checkScramble()">✅ בדוק</button>
-                        <button class="btn btn-success" onclick="startScramble()">➡️ הבא</button>
-                    </div>
-                    <div id="scramble-feedback"></div>
-                </div>
-            `;
-            
-            window.checkScramble = function() {
-                const input = document.getElementById('scramble-input').value.trim().toLowerCase();
-                const feedback = document.getElementById('scramble-feedback');
-                if (input === v.word.toLowerCase()) {
-                    feedback.innerHTML = '<div style="color:var(--success); font-weight:700; margin-top:1rem;">✅ נכון!</div>';
-                    streak++;
-                    totalCorrect++;
-                    totalAnswered++;
-                    updateStats();
-                    saveProgress();
-                } else {
-                    feedback.innerHTML = '<div style="color:var(--danger); font-weight:700; margin-top:1rem;">❌ לא נכון. נסה שוב!</div>';
-                    streak = 0;
-                    updateStats();
-                }
-            };
-        }
-
-        // ===================== PROGRESS & STATS =====================
-        function updateStats() {
-            document.getElementById('total-answered').textContent = totalAnswered;
-            document.getElementById('total-correct').textContent = totalCorrect;
-            const accuracy = totalAnswered > 0 ? Math.round(totalCorrect / totalAnswered * 100) : 0;
-            document.getElementById('accuracy').textContent = accuracy + '%';
-            document.getElementById('streak-count').textContent = streak;
-        }
-
-        function updateProgressBar(id, percent) {
-            document.getElementById('progress-' + id).style.width = percent + '%';
-        }
-
-        function updateWordOfDay() {
-            const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-            const word = vocabulary[dayOfYear % vocabulary.length];
-            document.getElementById('wod-word').textContent = word.word;
-            document.getElementById('wod-meaning').textContent = word.meaning;
-            document.getElementById('wod-example').innerHTML = `"${word.sentence}"<br><small>הקליקו על המילה כדי לשמוע את ההגייה</small>`;
-            document.getElementById('wod-word').onclick = () => speak(word.word);
-        }
-
-        function updateDashboard() {
-            const data = JSON.parse(localStorage.getItem('englishMasterProgress') || '{}');
-            document.getElementById('dash-vocab').textContent = data.vocab || 0;
-            document.getElementById('dash-grammar').textContent = data.grammar || 0;
-            document.getElementById('dash-passive').textContent = data.passive || 0;
-            document.getElementById('dash-unseen').textContent = data.unseen || 0;
-            document.getElementById('dash-writing').textContent = data.writing || 0;
-            document.getElementById('dash-total').textContent = (data.total || 0);
-        }
-
-        function renderActivityCalendar() {
-            const container = document.getElementById('activity-calendar');
-            const today = new Date();
-            let html = '';
-            for (let i = 0; i < 28; i++) {
-                const d = new Date(today);
-                d.setDate(d.getDate() - i);
-                const key = 'activity_' + d.toISOString().split('T')[0];
-                const active = localStorage.getItem(key) ? 'var(--success)' : '#e2e8f0';
-                html = `<div style="aspect-ratio:1; border-radius:8px; background:${active};" title="${d.toLocaleDateString('he-IL')}"></div>` + html;
-            }
-            container.innerHTML = html;
-        }
-
-        function saveProgress() {
-            const today = new Date().toISOString().split('T')[0];
-            localStorage.setItem('activity_' + today, 'true');
-            
-            const data = JSON.parse(localStorage.getItem('englishMasterProgress') || '{}');
-            data.vocab = knownWords.size;
-            data.grammar = (data.grammar || 0) + 1;
-            data.passive = (data.passive || 0) + 1;
-            data.total = totalCorrect;
-            localStorage.setItem('englishMasterProgress', JSON.stringify(data));
-            
-            updateProgressBar('vocab', knownWords.size / vocabulary.length * 100);
-            updateProgressBar('grammar', Math.min((data.grammar || 0) / 100 * 100, 100));
-            updateProgressBar('passive', Math.min((data.passive || 0) / 100 * 100, 100));
-            renderActivityCalendar();
-            updateDashboard();
-        }
-
-        function loadProgress() {
-            const data = JSON.parse(localStorage.getItem('englishMasterProgress') || '{}');
-            if (data.vocab) knownWords = new Set(Array.from({length: data.vocab}, (_, i) => i));
-            totalCorrect = data.total || 0;
-        }
-
-        function resetProgress() {
-            if (confirm('האם אתה בטוח שברצונך לאפס את כל ההתקדמות?')) {
-                localStorage.clear();
-                knownWords = new Set();
-                totalCorrect = 0;
-                totalAnswered = 0;
-                streak = 0;
-                updateStats();
-                updateDashboard();
-                renderActivityCalendar();
-                location.reload();
-            }
-        }
-
-        // ===================== SCORE POPUP =====================
-        function showScorePopup(score, max, title) {
-            const percent = max > 0 ? Math.round(score / max * 100) : 0;
-            document.getElementById('score-value').textContent = percent + '%';
-            
-            let emoji = '😢';
-            let message = 'תמשיך לתרגל!';
-            if (percent >= 90) { emoji = '🏆'; message = 'מדהים! אתה אלוף!'; }
-            else if (percent >= 70) { emoji = '🎉'; message = 'מעולה! עבודה יפה!'; }
-            else if (percent >= 50) { emoji = '👍'; message = 'טוב! יש מקום לשיפור.'; }
-            
-            document.getElementById('score-emoji').textContent = emoji;
-            document.getElementById('score-message').textContent = message;
-            document.getElementById('score-overlay').classList.add('show');
-            document.getElementById('score-popup').classList.add('show');
-            
-            if (percent >= 70) launchConfetti();
-        }
-
-        function closeScorePopup() {
-            document.getElementById('score-overlay').classList.remove('show');
-            document.getElementById('score-popup').classList.remove('show');
-        }
-
-        // ===================== CONFETTI =====================
-        function launchConfetti() {
-            const canvas = document.getElementById('confetti-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const particles = [];
-            const colors = ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#4facfe', '#43e97b'];
-            
-            for (let i = 0; i < 150; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height - canvas.height,
-                    vx: (Math.random() - 0.5) * 4,
-                    vy: Math.random() * 3 + 2,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    size: Math.random() * 8 + 4,
-                    rotation: Math.random() * 360,
-                    rotationSpeed: (Math.random() - 0.5) * 10
-                });
-            }
-            
-            let frame = 0;
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.rotation += p.rotationSpeed;
-                    ctx.save();
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.rotation * Math.PI / 180);
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
-                    ctx.restore();
-                });
-                frame++;
-                if (frame < 200) requestAnimationFrame(animate);
-                else ctx.clearRect(0, 0, canvas.width, canvas.height);
-            }
-            animate();
-        }
-
-        function startDailyChallenge() {
-            generateVocabQuiz();
-            showVocabQuiz();
-        }
-
-        // ===================== INIT =====================
-        window.onload = init;
-    </script>
+<header><div class="header-content"><div class="logo">🚀 English Master</div><div class="stats"><div class="stat"><div class="stat-value" id="ta">0</div><div class="stat-label">תשובות</div></div><div class="stat"><div class="stat-value" id="tc">0</div><div class="stat-label">נכונות</div></div><div class="stat"><div class="stat-value" id="acc">0%</div><div class="stat-label">דיוק</div></div><div class="streak">🔥 <span id="str">0</span></div></div></div></header>
+<nav><div class="nav-content">
+<button class="nav-btn active" onclick="show('home')">🏠 בית</button>
+<button class="nav-btn" onclick="show('vocab')">📚 מילים</button>
+<button class="nav-btn" onclick="show('grammar')">⚡ דקדוק</button>
+<button class="nav-btn" onclick="show('passive')">🔄 Passive</button>
+<button class="nav-btn" onclick="show('unseen')">📖 קריאה</button>
+<button class="nav-btn" onclick="show('writing')">✍️ כתיבה</button>
+<button class="nav-btn" onclick="show('games')">🎮 משחקים</button>
+<button class="nav-btn" onclick="show('progress')">📊 התקדמות</button>
+</div></nav>
+<div class="container">
+
+<div id="home" class="section active">
+<div class="hero"><h1>English Master</h1><p>תרגול אנגלית למבחני מעבר - כיתות ח'-ט'</p></div>
+<div class="daily-challenge"><h3>🎯 אתגר יומי</h3><p>השלם 20 שאלות היום!</p><button class="btn btn-primary" onclick="show('vocab');startDaily()">▶️ התחל</button></div>
+<div class="word-of-day"><div class="word-of-day-label">📖 מילת היום</div><div class="word-of-day-word" id="wodw" onclick="speak()">Achieve</div><div class="word-of-day-meaning" id="wodm">להשיג</div><div class="word-of-day-example" id="wode">"She worked hard to achieve her goals."</div></div>
+<div class="cards-grid">
+<div class="card" onclick="show('vocab')"><div class="card-icon">📚</div><h3>אוצר מילים</h3><p>יחידות 1-4</p><div class="progress-bar"><div class="progress-fill" id="pvocab"></div></div></div>
+<div class="card" onclick="show('grammar')"><div class="card-icon">⚡</div><h3>דקדוק</h3><p>כל הזמנים</p><div class="progress-bar"><div class="progress-fill" id="pgram"></div></div></div>
+<div class="card" onclick="show('passive')"><div class="card-icon">🔄</div><h3>Passive</h3><p>Active ↔ Passive</p><div class="progress-bar"><div class="progress-fill" id="ppass"></div></div></div>
+<div class="card" onclick="show('unseen')"><div class="card-icon">📖</div><h3>Unseen</h3><p>טקסטים עם שאלות</p><div class="progress-bar"><div class="progress-fill" id="punseen"></div></div></div>
+<div class="card" onclick="show('writing')"><div class="card-icon">✍️</div><h3>כתיבה</h3><p>תיאורית ודעה</p><div class="progress-bar"><div class="progress-fill" id="pwrite"></div></div></div>
+<div class="card" onclick="show('games')"><div class="card-icon">🎮</div><h3>משחקים</h3><p>למידה מהנה</p><div class="progress-bar"><div class="progress-fill" id="pgame"></div></div></div>
+</div></div>
+
+<div id="vocab" class="section">
+<h2 class="hero" style="padding:1rem"><span style="color:#fff">📚 אוצר מילים</span></h2>
+<div class="filter-bar">
+<button class="filter-btn active" onclick="vmode('flash')">🃏 כרטיסיות</button>
+<button class="filter-btn" onclick="vmode('quiz');initVQ()">❓ חידון</button>
+<button class="filter-btn" onclick="vmode('list')">📋 רשימה</button>
+<button class="filter-btn" onclick="vmode('match');initMatch()">🔗 התאמה</button>
+</div>
+<div id="vflash" class="vmode">
+<div class="flashcard-container"><div class="flashcard" id="fc" onclick="flip()">
+<div class="flashcard-face flashcard-front"><div class="flashcard-word" id="fcw">Achieve</div><div style="opacity:.8;font-size:.9rem">לחץ לתרגום</div></div>
+<div class="flashcard-face flashcard-back"><div class="flashcard-word" id="fcm">להשיג</div><div style="opacity:.8;font-size:.9rem" id="fcs">"She worked hard..."</div></div>
+</div></div>
+<div class="controls">
+<button class="btn btn-secondary" onclick="prevC()">⬅️</button>
+<button class="btn btn-success" onclick="know()">✅ יודע</button>
+<button class="btn btn-danger" onclick="nextC()">❌</button>
+<button class="btn btn-primary" onclick="nextC()">➡️</button>
+</div>
+<p style="text-align:center;color:#fff;margin-top:1rem"><span id="fcc">1</span>/<span id="fct">50</span></p>
+</div>
+<div id="vquiz" class="vmode" style="display:none">
+<div class="quiz-container">
+<div class="quiz-progress"><span>שאלה <span id="vqc">1</span>/<span id="vqt">20</span></span><div class="quiz-progress-bar"><div class="quiz-progress-fill" id="vqp"></div></div><span id="vqs">0</span> נק'</span></div>
+<div class="feedback" id="vqf"></div>
+<div class="quiz-question" id="vqq">מה הפירוש?</div>
+<div class="quiz-options" id="vqo"></div>
+<div class="controls"><button class="btn btn-primary" onclick="nextVQ()">הבא ➡️</button></div>
+</div></div>
+<div id="vlist" class="vmode" style="display:none"><div class="vocab-grid" id="vlst"></div></div>
+<div id="vmatch" class="vmode" style="display:none">
+<div style="text-align:center;color:#fff;margin-bottom:1rem"><h3>התאם מילה לפירוש!</h3><p>נק': <span id="ms">0</span></p></div>
+<div class="match-game" id="mg"></div>
+</div>
+</div>
+
+<div id="grammar" class="section">
+<h2 class="hero" style="padding:1rem"><span style="color:#fff">⚡ דקדוק</span></h2>
+<div class="filter-bar">
+<button class="filter-btn active" onclick="gmode('tenses')">📖 זמנים</button>
+<button class="filter-btn" onclick="gmode('quiz');initGQ()">❓ תרגול</button>
+</div>
+<div id="gtenses" class="gmode">
+<div class="tense-grid">
+<div class="tense-card"><h3>📗 Present Simple</h3><div class="tense-formula">S + V1(s/es)</div><ul class="tense-examples"><li>I play football.<br><span class="he">אני משחק כדורגל.</span></li><li>She watches TV.<br><span class="he">היא צופה בטלוויזיה.</span></li></ul></div>
+<div class="tense-card"><h3>📙 Present Progressive</h3><div class="tense-formula">S + am/is/are + V-ing</div><ul class="tense-examples"><li>I am playing now.<br><span class="he">אני משחק עכשיו.</span></li><li>She is watching TV.<br><span class="he">היא צופה עכשיו.</span></li></ul></div>
+<div class="tense-card"><h3>📕 Past Simple</h3><div class="tense-formula">S + V2 / did + V1</div><ul class="tense-examples"><li>I played yesterday.<br><span class="he">שחקתי אתמול.</span></li><li>Did they watch?<br><span class="he">הם צפו?</span></li></ul></div>
+<div class="tense-card"><h3>📘 Future Simple</h3><div class="tense-formula">S + will + V1</div><ul class="tense-examples"><li>I will play tomorrow.<br><span class="he">אשחק מחר.</span></li><li>Will they come?<br><span class="he">הם יבואו?</span></li></ul></div>
+<div class="tense-card"><h3>📒 Past Progressive</h3><div class="tense-formula">S + was/were + V-ing</div><ul class="tense-examples"><li>I was playing at 5pm.<br><span class="he">שחקתי בשעה 5.</span></li><li>They were watching.<br><span class="he">הם צפו.</span></li></ul></div>
+<div class="tense-card"><h3>🎯 טיפים</h3><ul class="tense-examples"><li>Always, usually → Present Simple</li><li>Now, at the moment → Present Progressive</li><li>Yesterday, last week → Past Simple</li><li>Tomorrow, next year → Future Simple</li></ul></div>
+</div></div>
+<div id="gquiz" class="gmode" style="display:none">
+<div class="quiz-container">
+<div class="quiz-progress"><span>שאלה <span id="gqc">1</span>/<span id="gqt">15</span></span><div class="quiz-progress-bar"><div class="quiz-progress-fill" id="gqp"></div></div><span id="gqs">0</span> נק'</span></div>
+<div class="feedback" id="gqf"></div>
+<div class="quiz-question" id="gqq"></div>
+<div class="quiz-options" id="gqo"></div>
+<div class="controls"><button class="btn btn-primary" onclick="nextGQ()">הבא ➡️</button></div>
+</div></div>
+</div>
+
+<div id="passive" class="section">
+<h2 class="hero" style="padding:1rem"><span style="color:#fff">🔄 Passive Voice</span></h2>
+<div class="toggle-container">
+<button class="toggle-btn active" onclick="pmode('a2p')">Active → Passive</button>
+<button class="toggle-btn" onclick="pmode('p2a')">Passive → Active</button>
+<button class="toggle-btn" onclick="pmode('quiz');initPQ()">חידון</button>
+</div>
+<div id="pa2p" class="pmode">
+<div style="max-width:700px;margin:0 auto">
+<div class="exercise-box active"><div class="exercise-label">Active</div><div class="exercise-text" id="pva">The chef cooks the meal.</div></div>
+<div style="text-align:center;color:#fff;font-size:2rem">⬇️</div>
+<div class="exercise-box passive"><div class="exercise-label">Passive</div><input class="exercise-input" id="pvi" placeholder="הקלד את המשפט ב-Passive..."></div>
+<div class="controls"><button class="btn btn-primary" onclick="checkP()">✅ בדוק</button><button class="btn btn-secondary" onclick="hintP()">💡 רמז</button><button class="btn btn-success" onclick="nextP()">➡️</button></div>
+<div class="feedback" id="pvf"></div>
+</div></div>
+<div id="pp2a" class="pmode" style="display:none">
+<div style="max-width:700px;margin:0 auto">
+<div class="exercise-box passive"><div class="exercise-label">Passive</div><div class="exercise-text" id="pvp">The meal is cooked by the chef.</div></div>
+<div style="text-align:center;color:#fff;font-size:2rem">⬇️</div>
+<div class="exercise-box active"><div class="exercise-label">Active</div><input class="exercise-input" id="pvi2" placeholder="הקלד את המשפט ב-Active..."></div>
+<div class="controls"><button class="btn btn-primary" onclick="checkP2()">✅ בדוק</button><button class="btn btn-success" onclick="nextP2()">➡️</button></div>
+<div class="feedback" id="pvf2"></div>
+</div></div>
+<div id="pquiz" class="pmode" style="display:none">
+<div class="quiz-container">
+<div class="quiz-progress"><span>שאלה <span id="pqc">1</span>/<span id="pqt">15</span></span><div class="quiz-progress-bar"><div class="quiz-progress-fill" id="pqp"></div></div><span id="pqs">0</span> נק'</span></div>
+<div class="feedback" id="pqf"></div>
+<div class="quiz-question" id="pqq"></div>
+<div class="quiz-options" id="pqo"></div>
+<div class="controls"><button class="btn btn-primary" onclick="nextPQ()">הבא ➡️</button></div>
+</div></div>
+</div>
+
+<div id="unseen" class="section">
+<h2 class="hero" style="padding:1rem"><span style="color:#fff">📖 Unseen</span></h2>
+<div class="filter-bar">
+<button class="filter-btn active" onclick="showU(0)">טקסט 1</button>
+<button class="filter-btn" onclick="showU(1)">טקסט 2</button>
+<button class="filter-btn" onclick="showU(2)">טקסט 3</button>
+</div>
+<div id="utext" class="reading-text"></div>
+<div id="uquestions"></div>
+<div class="controls"><button class="btn btn-primary" onclick="checkU()">✅ בדוק</button></div>
+</div>
+
+<div id="writing" class="section">
+<h2 class="hero" style="padding:1rem"><span style="color:#fff">✍️ כתיבה</span></h2>
+<div class="filter-bar">
+<button class="filter-btn active" onclick="showW(0)">תיאורית</button>
+<button class="filter-btn" onclick="showW(1)">דעה</button>
+<button class="filter-btn" onclick="showW(2)">סיפור</button>
+</div>
+<div id="wprompt" class="writing-prompt"></div>
+<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;color:#fff">
+<span>⏱️ זמן:</span><div class="timer-display" id="timer">15:00</div>
+<button class="btn btn-primary" onclick="startT()">▶️</button>
+<button class="btn btn-secondary" onclick="resetT()">🔄</button>
+</div>
+<textarea class="writing-textarea" id="warea" placeholder="כתוב כאן..."></textarea>
+<div class="controls">
+<button class="btn btn-primary" onclick="saveW()">💾 שמור</button>
+<button class="btn btn-success" onclick="countW()">📝 מילים</button>
+</div>
+<div id="wcount" style="text-align:center;color:#fff;margin-top:1rem;font-weight:700"></div>
+</div>
+
+<div id="games" class="section">
+<h2 class="hero" style="padding:1rem"><span style="color:#fff">🎮 משחקים</span></h2>
+<div class="cards-grid">
+<div class="card" onclick="startSpeed()"><div class="card-icon">⚡</div><h3>מהירות</h3><p>כמה תרגומים בדקה?</p></div>
+<div class="card" onclick="startHangman()"><div class="card-icon">🎯</div><h3>Hangman</h3><p>נחש את המילה</p></div>
+<div class="card" onclick="startScramble()"><div class="card-icon">🔄</div><h3>מעורבבות</h3><p>סדר אותיות</p></div>
+<div class="card" onclick="show('vocab');vmode('match');initMatch()"><div class="card-icon">🔗</div><h3>התאמה</h3><p>התאם מילים</p></div>
+</div>
+<div id="garea" style="margin-top:1rem"></div>
+</div>
+
+<div id="progress" class="section">
+<h2 class="hero" style="padding:1rem"><span style="color:#fff">📊 התקדמות</span></h2>
+<div class="dashboard">
+<div class="dashboard-card"><div class="dashboard-icon">📚</div><div class="dashboard-value" id="dv">0</div><div class="dashboard-label">מילים</div></div>
+<div class="dashboard-card"><div class="dashboard-icon">⚡</div><div class="dashboard-value" id="dg">0</div><div class="dashboard-label">דקדוק</div></div>
+<div class="dashboard-card"><div class="dashboard-icon">🔄</div><div class="dashboard-value" id="dp">0</div><div class="dashboard-label">Passive</div></div>
+<div class="dashboard-card"><div class="dashboard-icon">📖</div><div class="dashboard-value" id="du">0</div><div class="dashboard-label">Unseen</div></div>
+<div class="dashboard-card"><div class="dashboard-icon">🏆</div><div class="dashboard-value" id="dt">0</div><div class="dashboard-label">סה"כ</div></div>
+</div>
+<div style="text-align:center;margin-top:2rem"><button class="btn btn-danger" onclick="resetAll()">🗑️ אפס הכל</button></div>
+</div>
+
+</div>
+
+<div class="score-overlay" id="so" onclick="closeS()"></div>
+<div class="score-popup" id="sp">
+<div class="score-emoji" id="se">🎉</div>
+<div class="score-value" id="sv">100%</div>
+<div class="score-message" id="sm">מעולה!</div>
+<button class="btn btn-primary" onclick="closeS()">סגור</button>
+</div>
+
+<script>
+const vocab=[
+{w:"Achieve",m:"להשיג",s:"She worked hard to achieve her goals."},
+{w:"Adventure",m:"הרפתקה",s:"We went on an exciting adventure."},
+{w:"Ambition",m:"שאיפה",s:"His ambition is to become a doctor."},
+{w:"Ancient",m:"עתיק",s:"We visited ancient ruins."},
+{w:"Angry",m:"כועס",s:"He was angry when he lost."},
+{w:"Annoy",m:"להרגיז",s:"The noise started to annoy me."},
+{w:"Anxious",m:"חרד",s:"She felt anxious before the exam."},
+{w:"Appear",m:"להופיע",s:"The magician made the rabbit appear."},
+{w:"Approach",m:"לגשת",s:"We need a new approach."},
+{w:"Argue",m:"להתווכח",s:"They always argue."},
+{w:"Arrange",m:"לארגן",s:"I will arrange the meeting."},
+{w:"Arrive",m:"להגיע",s:"The train will arrive at 6."},
+{w:"Ashamed",m:"מתבייש",s:"He was ashamed of his behavior."},
+{w:"Attack",m:"לתקוף",s:"The army decided to attack."},
+{w:"Attempt",m:"ניסיון",s:"This is my third attempt."},
+{w:"Attend",m:"להשתתף",s:"Did you attend the meeting?"},
+{w:"Attract",m:"למשוך",s:"Bright colors attract tourists."},
+{w:"Avoid",m:"להימנע",s:"Avoid eating too much sugar."},
+{w:"Awful",m:"נורא",s:"The weather was awful."},
+{w:"Battle",m:"קרב",s:"The battle lasted three days."},
+{w:"Be aware",m:"להיות מודע",s:"Be aware of the dangers."},
+{w:"Be responsible",m:"להיות אחראי",s:"Who is responsible?"},
+{w:"Be used to",m:"להיות רגיל",s:"I am used to waking up early."},
+{w:"Beat",m:"להביס",s:"Our team beat the champions."},
+{w:"Belong",m:"להשתייך",s:"This book belongs to the library."},
+{w:"Benefit",m:"תועלת",s:"Exercise has many benefits."},
+{w:"Blame",m:"להאשים",s:"Don't blame me."},
+{w:"Boring",m:"משעמם",s:"The lecture was boring."},
+{w:"Brave",m:"אמיץ",s:"The brave firefighter saved the child."},
+{w:"Break",m:"לשבור",s:"Let's take a break."},
+{w:"Bright",m:"בהיר",s:"The room was bright."},
+{w:"Calm",m:"רגוע",s:"Stay calm during the interview."},
+{w:"Care",m:"לדאוג",s:"I don't care what they think."},
+{w:"Careful",m:"זהיר",s:"Be careful when crossing."},
+{w:"Cause",m:"סיבה",s:"Smoking can cause cancer."},
+{w:"Challenge",m:"אתגר",s:"Climbing was a real challenge."},
+{w:"Chance",m:"סיכוי",s:"Give me one more chance."},
+{w:"Change",m:"לשנות",s:"We need to change our plan."},
+{w:"Character",m:"דמות",s:"The main character is brave."},
+{w:"Charge",m:"לחייב",s:"They charge five dollars."},
+{w:"Choice",m:"בחירה",s:"You have the choice."},
+{w:"Choose",m:"לבחור",s:"I choose the blue shirt."},
+{w:"Clever",m:"חכם",s:"She found a clever solution."},
+{w:"Climate",m:"אקלים",s:"The climate is tropical."},
+{w:"Climb",m:"לטפס",s:"We plan to climb the mountain."},
+{w:"Collect",m:"לאסוף",s:"I collect stamps."},
+{w:"Comfortable",m:"נוח",s:"This chair is comfortable."},
+{w:"Common",m:"נפוץ",s:"This is a common mistake."},
+{w:"Communicate",m:"לתקשר",s:"We need to communicate better."},
+{w:"Compare",m:"להשוות",s:"Let's compare prices."},
+{w:"Compete",m:"להתחרות",s:"Athletes will compete."}
+];
+const gq=[
+{q:"She _____ to school every day.",o:["go","goes","going","went"],c:1,t:"Present Simple"},
+{q:"They _____ TV right now.",o:["watch","watches","are watching","watched"],c:2,t:"Present Progressive"},
+{q:"I _____ a movie last night.",o:["see","saw","seen","seeing"],c:1,t:"Past Simple"},
+{q:"We _____ to the beach tomorrow.",o:["will go","go","went","going"],c:0,t:"Future Simple"},
+{q:"He _____ basketball when I called.",o:["plays","played","was playing","is playing"],c:2,t:"Past Progressive"},
+{q:"The sun _____ in the east.",o:["rise","rises","rising","rose"],c:1,t:"Present Simple"},
+{q:"Look! The baby _____.",o:["sleep","sleeps","is sleeping","slept"],c:2,t:"Present Progressive"},
+{q:"She _____ her homework already.",o:["finish","finishes","finished","has finished"],c:3,t:"Present Perfect"},
+{q:"By next year, I _____ my degree.",o:["will complete","will have completed","complete","completing"],c:1,t:"Future Perfect"},
+{q:"If I _____ rich, I would travel.",o:["am","was","were","be"],c:2,t:"Conditional"},
+{q:"Water _____ at 100 degrees.",o:["boil","boils","boiling","boiled"],c:1,t:"Present Simple"},
+{q:"They _____ in this house since 2010.",o:["live","lived","have lived","living"],c:2,t:"Present Perfect"},
+{q:"While I _____, the phone rang.",o:["cook","cooked","was cooking","am cooking"],c:2,t:"Past Progressive"},
+{q:"I _____ never _____ such a sunset.",o:["have...seen","had...seen","did...see","am...seeing"],c:0,t:"Present Perfect"},
+{q:"By the time we arrived, the movie _____.",o:["started","had started","starts","starting"],c:1,t:"Past Perfect"}
+];
+const pv=[
+{a:"The chef cooks the meal.",p:"The meal is cooked by the chef."},
+{a:"Tom writes a letter.",p:"A letter is written by Tom."},
+{a:"The children are eating the cake.",p:"The cake is being eaten by the children."},
+{a:"Someone stole my bike.",p:"My bike was stolen by someone."},
+{a:"The teacher was explaining the lesson.",p:"The lesson was being explained by the teacher."},
+{a:"They will build a new school.",p:"A new school will be built by them."},
+{a:"She has finished the project.",p:"The project has been finished by her."},
+{a:"The dog bit the man.",p:"The man was bitten by the dog."},
+{a:"We are watching a movie.",p:"A movie is being watched by us."},
+{a:"The company will launch a product.",p:"A new product will be launched by the company."},
+{a:"My mother is baking a cake.",p:"A cake is being baked by my mother."},
+{a:"The students had completed the test.",p:"The test had been completed by the students."},
+{a:"Someone is cleaning the room.",p:"The room is being cleaned by someone."},
+{a:"They were repairing the road.",p:"The road was being repaired by them."},
+{a:"The police have arrested the thief.",p:"The thief has been arrested by the police."}
+];
+const pq=[
+{q:"'The boy kicks the ball.' → Passive",o:["The ball is kicked by the boy.","The ball kicked by the boy.","The ball was kicked by the boy.","The ball kicks by the boy."],c:0},
+{q:"'She is singing a song.' → Passive",o:["A song is sung by her.","A song is being sung by her.","A song was sung by her.","A song sung by her."],c:1},
+{q:"'They finished the work.' → Passive",o:["The work is finished by them.","The work was finished by them.","The work has been finished by them.","The work finished by them."],c:1},
+{q:"'He will write the report.' → Passive",o:["The report will be written by him.","The report is written by him.","The report was written by him.","The report will written by him."],c:0},
+{q:"'The cat is chasing the mouse.' → Passive",o:["The mouse is chased by the cat.","The mouse is being chased by the cat.","The mouse was chased by the cat.","The mouse chased by the cat."],c:1},
+{q:"Which sentence is in Passive?",o:["The dog bit the man.","The man was bitten by the dog.","The dog bites the man.","The man bites the dog."],c:1},
+{q:"'The cake was eaten by the children.' → Active",o:["The children eat the cake.","The children ate the cake.","The children were eating the cake.","The children had eaten the cake."],c:1},
+{q:"'Someone has stolen my car.' → Passive",o:["My car is stolen by someone.","My car was stolen by someone.","My car has been stolen by someone.","My car stolen by someone."],c:2},
+{q:"'They are building a house.' → Passive",o:["A house is built by them.","A house is being built by them.","A house was built by them.","A house built by them."],c:1},
+{q:"'The teacher explained the lesson.' → Passive",o:["The lesson is explained by the teacher.","The lesson was explained by the teacher.","The lesson has been explained by the teacher.","The lesson explained by the teacher."],c:1},
+{q:"'The letter _____ by John.'",o:["is written","was written","has written","wrote"],c:1},
+{q:"'She will clean the room.' → Passive",o:["The room will be cleaned by her.","The room is cleaned by her.","The room was cleaned by her.","The room will cleaned by her."],c:0},
+{q:"'The window was broken by the ball.' → Active",o:["The ball breaks the window.","The ball broke the window.","The ball is breaking the window.","The ball had broken the window."],c:1},
+{q:"'My mother is cooking dinner.' → Passive",o:["Dinner is cooked by my mother.","Dinner is being cooked by my mother.","Dinner was cooked by my mother.","Dinner has been cooked by my mother."],c:1},
+{q:"'The book was read by many students.'",o:["Active","Passive","Neither","Both"],c:1}
+];
+const unseen=[
+{title:"The Amazing World of Dolphins",text:`Dolphins are some of the most intelligent animals on Earth. They live in oceans all around the world and are known for their friendly behavior towards humans. Dolphins can swim at speeds of up to 25 miles per hour and can hold their breath for up to 10 minutes underwater.\n\nScientists have discovered that dolphins communicate with each other using a complex system of clicks and whistles. Each dolphin has its own unique whistle, similar to how humans have names. They also use echolocation to find food and navigate in the dark ocean waters.\n\nDolphins are very social animals. They live in groups called pods, which can contain anywhere from a few dolphins to over a thousand. They work together to protect each other from predators like sharks. When a dolphin is sick or injured, other dolphins will help it reach the surface to breathe.\n\nUnfortunately, dolphins face many dangers today. Pollution, fishing nets, and habitat destruction threaten their survival. Many organizations are working hard to protect these amazing creatures and their ocean homes.`,qs:[{q:"How fast can dolphins swim?",o:["10 mph","15 mph","25 mph","50 mph"],c:2},{q:"How do dolphins communicate?",o:["By singing","Using clicks and whistles","By writing","Body language only"],c:1},{q:"What is a group of dolphins called?",o:["A herd","A flock","A pod","A school"],c:2},{q:"What do dolphins use to find food in dark waters?",o:["Their eyes","Echolocation","Their smell","Special lights"],c:1},{q:"What threatens dolphins today?",o:["Only sharks","Pollution and fishing nets","Too much food","Cold weather"],c:1}]},
+{title:"The History of Chocolate",text:`Chocolate has a long and fascinating history that dates back over 3,000 years. The ancient Mayans and Aztecs in Central America were the first people to discover chocolate. They made a bitter drink from cacao beans and believed it had magical powers.\n\nWhen Spanish explorers arrived in the Americas in the 1500s, they brought cacao beans back to Europe. At first, chocolate was only available to royalty and the very wealthy because it was so expensive. It wasn't until the 1800s that chocolate became affordable for ordinary people.\n\nIn 1847, a British company called Fry's created the first solid chocolate bar. Before that, chocolate was only consumed as a drink. Later, milk chocolate was invented by adding milk powder to the recipe.\n\nModern chocolate production is a huge industry. Millions of people around the world work in cacao farming, and chocolate is one of the most popular treats globally.`,qs:[{q:"Who were the first to discover chocolate?",o:["The Spanish","The British","The Mayans and Aztecs","The Swiss"],c:2},{q:"What did the Aztecs believe about chocolate?",o:["It was poisonous","It had magical powers","It was only for children","It was too sweet"],c:1},{q:"When was the first solid chocolate bar created?",o:["1500s","1600s","1700s","1847"],c:3},{q:"Which country is famous for fine chocolate today?",o:["Spain","Britain","Switzerland","Mexico"],c:2},{q:"What modern concern is mentioned?",o:["It tastes too sweet","Fair wages and child labor","Too much chocolate","Too expensive"],c:1}]},
+{title:"The Benefits of Reading",text:`Reading is one of the most important skills a person can develop. Studies have shown that people who read regularly have better memory, stronger analytical skills, and improved focus and concentration. Reading is like exercise for the brain.\n\nOne of the greatest benefits of reading is that it expands your vocabulary. When you read books, newspapers, or articles, you encounter new words in context. This helps you understand their meaning naturally.\n\nReading also reduces stress. Research found that reading for just six minutes can reduce stress levels by up to 68 percent. This is more effective than listening to music or taking a walk.\n\nFurthermore, reading improves empathy. When you read about characters from different backgrounds, you learn to understand perspectives other than your own. Fiction readers score higher on tests of social awareness and empathy.`,qs:[{q:"What is reading compared to?",o:["A vacation","Exercise for the brain","A hobby","A waste of time"],c:1},{q:"How much can reading reduce stress?",o:["10%","30%","50%","68%"],c:3},{q:"What does reading help expand?",o:["Physical strength","Vocabulary","Height","Appetite"],c:1},{q:"Which readers score higher on empathy tests?",o:["Newspaper readers","Fiction readers","Magazine readers","Comic readers"],c:1},{q:"What is the main idea?",o:["Reading is boring","Reading is expensive","Reading has many benefits","Reading is difficult"],c:2}]}
+];
+const wtopics=[
+{type:"Descriptive Paragraph",title:"Describe Your Favorite Place",inst:["Write in Present Simple","Describe your favorite place","Use adjectives","At least 80 words","Use: beautiful, peaceful, relaxing, enjoy, favorite"],time:15},
+{type:"Opinion Essay",title:"Should Students Wear School Uniforms?",inst:["Write an opinion essay","Include intro, body, conclusion","Give at least 2 reasons","At least 100 words","Use: First, Second, However, In conclusion"],time:20},
+{type:"Story",title:"An Unforgettable Day",inst:["Write in Past Simple","Describe an unforgettable day","Use: yesterday, suddenly, then, finally","At least 80 words","Include 5 verbs in Past Simple"],time:15}
+];
+let ci=0,kw=new Set(),vqi=0,vqs=[],vqs2=0,gqi=0,gqs=[],gqs2=0,pi=0,pqi=0,pqs=[],pqs2=0,ui=0,ua={},ti=null,ts=0,str=0,ta=0,tc=0;
+function init(){load();upS();wod();rVL();rU(0);rW(0);dash()}
+function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));event.target.closest('.nav-btn').classList.add('active')}
+function upS(){document.getElementById('ta').textContent=ta;document.getElementById('tc').textContent=tc;document.getElementById('acc').textContent=ta>0?Math.round(tc/ta*100)+'%':'0%';document.getElementById('str').textContent=str}
+function wod(){const d=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);const v=vocab[d%vocab.length];document.getElementById('wodw').textContent=v.w;document.getElementById('wodm').textContent=v.m;document.getElementById('wode').textContent='"'+v.s+'"'}
+function speak(){const v=vocab[Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000)%vocab.length];if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(v.w);u.lang='en-US';speechSynthesis.speak(u)}}
+
+function vmode(m){document.querySelectorAll('.vmode').forEach(x=>x.style.display='none');document.getElementById('v'+m).style.display='block';document.querySelectorAll('#vocab .filter-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');if(m==='match')initMatch()}
+function flip(){document.getElementById('fc').classList.toggle('flipped')}
+function nextC(){ci=(ci+1)%vocab.length;upC()}
+function prevC(){ci=(ci-1+vocab.length)%vocab.length;upC()}
+function upC(){const c=document.getElementById('fc');c.classList.remove('flipped');setTimeout(()=>{document.getElementById('fcw').textContent=vocab[ci].w;document.getElementById('fcm').textContent=vocab[ci].m;document.getElementById('fcs').textContent='"'+vocab[ci].s+'"';document.getElementById('fcc').textContent=ci+1;document.getElementById('fct').textContent=vocab.length},300)}
+function know(){kw.add(ci);save();nextC();document.getElementById('pvocab').style.width=(kw.size/vocab.length*100)+'%'}
+function rVL(){document.getElementById('vlst').innerHTML=vocab.map((v,i)=>'<div class="vocab-item" onclick="spk(\''+v.w+'\')"><div class="vocab-num">'+(i+1)+'</div><div><div class="vocab-word">'+v.w+'</div><div class="vocab-meaning">'+v.m+'</div></div></div>').join('')}
+function spk(w){if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(w);u.lang='en-US';speechSynthesis.speak(u)}}
+
+function initVQ(){vqs=[];const u=new Set();while(vqs.length<20&&u.size<vocab.length){const x=Math.floor(Math.random()*vocab.length);if(u.has(x))continue;u.add(x);const c=vocab[x];const w=vocab.filter((v,i)=>i!==x).sort(()=>0.5-Math.random()).slice(0,3);const o=[c,...w].sort(()=>0.5-Math.random());vqs.push({w:c.w,c:o.indexOf(c),o:o.map(x=>x.m)})}vqi=0;vqs2=0;showVQ()}
+function showVQ(){if(vqs.length===0)initVQ();const q=vqs[vqi];document.getElementById('vqc').textContent=vqi+1;document.getElementById('vqt').textContent=vqs.length;document.getElementById('vqs').textContent=vqs2;document.getElementById('vqq').textContent='מה הפירוש של "'+q.w+'"?';document.getElementById('vqp').style.width=((vqi+1)/vqs.length*100)+'%';document.getElementById('vqo').innerHTML=q.o.map((o,i)=>'<div class="quiz-option" onclick="svq('+i+')">'+o+'</div>').join('');document.getElementById('vqf').className='feedback';document.getElementById('vqf').style.display='none'}
+function svq(i){const q=vqs[vqi];document.querySelectorAll('#vqo .quiz-option').forEach(o=>o.classList.add('disabled'));ta++;if(i===q.c){document.querySelectorAll('#vqo .quiz-option')[i].classList.add('correct');vqs2+=5;str++;tc++;document.getElementById('vqf').textContent='✅ נכון!';document.getElementById('vqf').className='feedback correct show'}else{document.querySelectorAll('#vqo .quiz-option')[i].classList.add('wrong');document.querySelectorAll('#vqo .quiz-option')[q.c].classList.add('correct');str=0;document.getElementById('vqf').textContent='❌ לא נכון. התשובה: '+q.o[q.c];document.getElementById('vqf').className='feedback wrong show'}upS();save()}
+function nextVQ(){vqi++;if(vqi>=vqs.length){showS(vqs2,vqs.length*5,'חידון מילים');vqi=0;vqs2=0;initVQ()}showVQ()}
+
+function initMatch(){const s=document.getElementById('mg');const sel=vocab.sort(()=>0.5-Math.random()).slice(0,8);const w=sel.map((v,i)=>({t:'w',x:v.w,id:i,p:i}));const m=sel.map((v,i)=>({t:'m',x:v.m,id:i+8,p:i}));const a=[...w,...m].sort(()=>0.5-Math.random());s.innerHTML=a.map(i=>'<div class="match-item" onclick="sm(this,'+i.p+',\''+i.t+'\')" data-p="'+i.p+'" data-t="'+i.t+'">'+i.x+'</div>').join('');window.ms=0;window.sel=null;window.mp=new Set();document.getElementById('ms').textContent='0'}
+function sm(el,p,t){if(window.mp.has(p)||el.classList.contains('selected'))return;if(!window.sel){window.sel={el,p,t};el.classList.add('selected')}else{if(window.sel.t===t){el.classList.add('wrong');window.sel.el.classList.add('wrong');setTimeout(()=>{el.classList.remove('wrong','selected');window.sel.el.classList.remove('wrong','selected');window.sel=null},500);str=0;upS()}else if(window.sel.p===p){el.classList.add('matched');window.sel.el.classList.add('matched');window.mp.add(p);window.ms+=10;str++;tc++;ta++;document.getElementById('ms').textContent=window.ms;window.sel=null;upS();save();if(window.mp.size===8){setTimeout(()=>{showS(window.ms,80,'התאמה');initMatch()},500)}}else{el.classList.add('wrong');window.sel.el.classList.add('wrong');setTimeout(()=>{el.classList.remove('wrong','selected');window.sel.el.classList.remove('wrong','selected');window.sel=null},500);str=0;upS()}}}
+
+function gmode(m){document.querySelectorAll('.gmode').forEach(x=>x.style.display='none');document.getElementById('g'+m).style.display='block';document.querySelectorAll('#grammar .filter-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');if(m==='quiz')initGQ()}
+function initGQ(){gqs=[...gq].sort(()=>0.5-Math.random()).slice(0,15);gqi=0;gqs2=0;showGQ()}
+function showGQ(){const q=gqs[gqi];document.getElementById('gqc').textContent=gqi+1;document.getElementById('gqt').textContent=gqs.length;document.getElementById('gqs').textContent=gqs2;document.getElementById('gqq').innerHTML=q.q+'<br><small style="color:#6366f1">('+q.t+')</small>';document.getElementById('gqp').style.width=((gqi+1)/gqs.length*100)+'%';document.getElementById('gqo').innerHTML=q.o.map((o,i)=>'<div class="quiz-option" onclick="sgq('+i+')">'+o+'</div>').join('');document.getElementById('gqf').className='feedback';document.getElementById('gqf').style.display='none'}
+function sgq(i){const q=gqs[gqi];document.querySelectorAll('#gqo .quiz-option').forEach(o=>o.classList.add('disabled'));ta++;if(i===q.c){document.querySelectorAll('#gqo .quiz-option')[i].classList.add('correct');gqs2+=5;str++;tc++;document.getElementById('gqf').textContent='✅ נכון! '+q.t;document.getElementById('gqf').className='feedback correct show'}else{document.querySelectorAll('#gqo .quiz-option')[i].classList.add('wrong');document.querySelectorAll('#gqo .quiz-option')[q.c].classList.add('correct');str=0;document.getElementById('gqf').textContent='❌ לא נכון. התשובה: '+q.o[q.c];document.getElementById('gqf').className='feedback wrong show'}upS();save()}
+function nextGQ(){gqi++;if(gqi>=gqs.length){showS(gqs2,gqs.length*5,'דקדוק');gqi=0;gqs2=0;initGQ()}showGQ()}
+
+function pmode(m){document.querySelectorAll('.pmode').forEach(x=>x.style.display='none');document.getElementById('p'+m).style.display='block';document.querySelectorAll('#passive .toggle-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');if(m==='quiz')initPQ()}
+function checkP(){const e=pv[pi];const i=document.getElementById('pvi').value.trim().toLowerCase();const c=e.p.toLowerCase();const f=document.getElementById('pvf');ta++;if(i===c||i.replace(/\\s+/g,' ').replace(/[.]/g,'')===c.replace(/\\s+/g,' ').replace(/[.]/g,'')){document.getElementById('pvi').className='exercise-input correct';f.textContent='✅ נכון!';f.className='feedback correct show';str++;tc++;pqs2+=10}else{document.getElementById('pvi').className='exercise-input wrong';f.textContent='❌ לא נכון. התשובה: '+e.p;f.className='feedback wrong show';str=0}upS();save()}
+function hintP(){const e=pv[pi];const p=e.p.split(' ');alert('רמז: '+p.slice(0,2).join(' ')+' ...')}
+function nextP(){pi=(pi+1)%pv.length;document.getElementById('pva').textContent=pv[pi].a;document.getElementById('pvi').value='';document.getElementById('pvi').className='exercise-input';document.getElementById('pvf').style.display='none'}
+function checkP2(){const e=pv[pi];const i=document.getElementById('pvi2').value.trim().toLowerCase();const c=e.a.toLowerCase();const f=document.getElementById('pvf2');ta++;if(i===c||i.replace(/\\s+/g,' ').replace(/[.]/g,'')===c.replace(/\\s+/g,' ').replace(/[.]/g,'')){document.getElementById('pvi2').className='exercise-input correct';f.textContent='✅ נכון!';f.className='feedback correct show';str++;tc++;pqs2+=10}else{document.getElementById('pvi2').className='exercise-input wrong';f.textContent='❌ לא נכון. התשובה: '+e.a;f.className='feedback wrong show';str=0}upS();save()}
+function nextP2(){pi=(pi+1)%pv.length;document.getElementById('pvp').textContent=pv[pi].p;document.getElementById('pvi2').value='';document.getElementById('pvi2').className='exercise-input';document.getElementById('pvf2').style.display='none'}
+function initPQ(){pqs=[...pq].sort(()=>0.5-Math.random()).slice(0,15);pqi=0;pqs2=0;showPQ()}
+function showPQ(){const q=pqs[pqi];document.getElementById('pqc').textContent=pqi+1;document.getElementById('pqt').textContent=pqs.length;document.getElementById('pqs').textContent=pqs2;document.getElementById('pqq').textContent=q.q;document.getElementById('pqp').style.width=((pqi+1)/pqs.length*100)+'%';document.getElementById('pqo').innerHTML=q.o.map((o,i)=>'<div class="quiz-option" onclick="spq('+i+')">'+o+'</div>').join('');document.getElementById('pqf').className='feedback';document.getElementById('pqf').style.display='none'}
+function spq(i){const q=pqs[pqi];document.querySelectorAll('#pqo .quiz-option').forEach(o=>o.classList.add('disabled'));ta++;if(i===q.c){document.querySelectorAll('#pqo .quiz-option')[i].classList.add('correct');pqs2+=5;str++;tc++;document.getElementById('pqf').textContent='✅ נכון!';document.getElementById('pqf').className='feedback correct show'}else{document.querySelectorAll('#pqo .quiz-option')[i].classList.add('wrong');document.querySelectorAll('#pqo .quiz-option')[q.c].classList.add('correct');str=0;document.getElementById('pqf').textContent='❌ לא נכון. התשובה: '+q.o[q.c];document.getElementById('pqf').className='feedback wrong show'}upS();save()}
+function nextPQ(){pqi++;if(pqi>=pqs.length){showS(pqs2,pqs.length*5,'Passive');pqi=0;pqs2=0;initPQ()}showPQ()}
+
+function showU(i){ui=i;ua={};rU(i);document.querySelectorAll('#unseen .filter-btn').forEach((b,j)=>b.classList.toggle('active',j===i))}
+function rU(i){const t=unseen[i];document.getElementById('utext').innerHTML='<h2>'+t.title+'</h2>'+t.text.split('\\n\\n').map(p=>'<p>'+p+'</p>').join('');document.getElementById('uquestions').innerHTML=t.qs.map((q,qi)=>'<div class="question-card"><div class="question-text">'+(qi+1)+'. '+q.q+'</div><div class="question-answers">'+q.o.map((o,oi)=>'<div class="answer-option" onclick="su('+qi+','+oi+')" data-q="'+qi+'" data-a="'+oi+'"><div class="answer-letter">'+String.fromCharCode(65+oi)+'</div><div>'+o+'</div></div>').join('')+'</div></div>').join('')}
+function su(q,a){ua[q]=a;document.querySelectorAll('[data-q="'+q+'"]').forEach(el=>el.classList.remove('selected'));document.querySelector('[data-q="'+q+'"][data-a="'+a+'"]').classList.add('selected')}
+function checkU(){const t=unseen[ui];let c=0;t.qs.forEach((q,qi)=>{document.querySelectorAll('[data-q="'+qi+'"]').forEach(el=>{el.classList.remove('correct','wrong');const a=parseInt(el.dataset.a);if(a===q.c)el.classList.add('correct');else if(a===ua[qi]&&ua[qi]!==q.c)el.classList.add('wrong')});if(ua[qi]===q.c)c++});ta+=t.qs.length;tc+=c;str=c===t.qs.length?str+1:0;upS();save();alert('תוצאות: '+c+'/'+t.qs.length+' נכונות!')}
+
+function showW(i){rW(i);document.querySelectorAll('#writing .filter-btn').forEach((b,j)=>b.classList.toggle('active',j===i))}
+function rW(i){const t=wtopics[i];document.getElementById('wprompt').innerHTML='<h3>'+t.type+': '+t.title+'</h3><ul>'+t.inst.map(x=>'<li>'+x+'</li>').join('')+'</ul>';ts=t.time*60;upT()}
+function upT(){const m=Math.floor(ts/60),s=ts%60;document.getElementById('timer').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s}
+function startT(){if(ti)clearInterval(ti);ti=setInterval(()=>{ts--;upT();if(ts<=0){clearInterval(ti);alert('הזמן נגמר!')}},1000)}
+function resetT(){if(ti)clearInterval(ti);ts=15*60;upT()}
+function countW(){const t=document.getElementById('warea').value.trim();document.getElementById('wcount').textContent='מילים: '+t.split(/\\s+/).filter(w=>w.length>0).length}
+function saveW(){localStorage.setItem('w_'+Date.now(),document.getElementById('warea').value);alert('נשמר!');save()}
+
+function startSpeed(){const a=document.getElementById('garea');let sc=0,tl=60,cw=0;const ws=[...vocab].sort(()=>0.5-Math.random()).slice(0,20);a.innerHTML='<div style="background:#fff;border-radius:20px;padding:2rem;text-align:center;max-width:500px;margin:0 auto"><h3>⚡ מהירות</h3><div style="font-size:2.5rem;font-weight:800;color:#6366f1;margin:1rem" id="sw">'+ws[0].w+'</div><div id="so"></div><div style="font-size:1.5rem" id="st">60</div><div id="ss">נק\': 0</div></div>';function sh(){if(cw>=ws.length||tl<=0){a.innerHTML='<div style="background:#fff;border-radius:20px;padding:2rem;text-align:center"><h3>נגמר!</h3><p>השגת '+sc+' נקודות!</p><button class="btn btn-primary" onclick="startSpeed()">שחק שוב</button></div>';save();return}const w=ws[cw];document.getElementById('sw').textContent=w.w;const wr=vocab.filter(v=>v.w!==w.w).sort(()=>0.5-Math.random()).slice(0,3);const o=[w,...wr].sort(()=>0.5-Math.random());document.getElementById('so').innerHTML=o.map((x,i)=>'<button class="btn btn-secondary" style="margin:.3rem" onclick="cs('+i+','+o.indexOf(w)+')">'+x.m+'</button>').join('')}window.cs=function(i,c){if(i===c){sc+=5;str++;tc++;ta++}else{str=0;ta++}cw++;document.getElementById('ss').textContent='נק\': '+sc;upS();sh()};const tm=setInterval(()=>{tl--;document.getElementById('st').textContent=tl;if(tl<=0){clearInterval(tm);a.innerHTML='<div style="background:#fff;border-radius:20px;padding:2rem;text-align:center"><h3>נגמר הזמן!</h3><p>השגת '+sc+' נקודות!</p><button class="btn btn-primary" onclick="startSpeed()">שחק שוב</button></div>';save()}},1000);sh()}
+function startHangman(){const a=document.getElementById('garea');const w=vocab[Math.floor(Math.random()*vocab.length)].w.toUpperCase();let g=new Set(),wr=0;const mx=6;a.innerHTML='<div style="background:#fff;border-radius:20px;padding:2rem;text-align:center;max-width:500px;margin:0 auto"><h3>🎯 Hangman</h3><div style="font-size:2rem;font-family:monospace;letter-spacing:.5rem;margin:1rem" id="hw"></div><div style="color:#ef4444;margin:1rem" id="hs">טעויות: 0/6</div><div style="display:flex;flex-wrap:wrap;gap:.3rem;justify-content:center" id="hl"></div><div id="hr"></div></div>';function up(){const d=w.split('').map(c=>g.has(c)?c:'_').join(' ');document.getElementById('hw').textContent=d;document.getElementById('hs').textContent='טעויות: '+wr+'/'+mx;if(!d.includes('_')){document.getElementById('hr').innerHTML='<div style="color:#10b981;font-size:1.5rem;font-weight:700">🎉 ניצחת!</div>';str++;tc++;ta++;upS();save()}else if(wr>=mx){document.getElementById('hr').innerHTML='<div style="color:#ef4444;font-size:1.5rem;font-weight:700">💔 המילה: '+w+'</div>';str=0;upS()}}const lt='ABCDEFGHIJKLMNOPQRSTUVWXYZ';document.getElementById('hl').innerHTML=lt.split('').map(c=>'<button class="btn btn-secondary" style="padding:.4rem .8rem" onclick="gh(\''+c+'\')">'+c+'</button>').join('');window.gh=function(c){if(g.has(c))return;g.add(c);if(!w.includes(c))wr++;up()};up()}
+function startScramble(){const a=document.getElementById('garea');const v=vocab[Math.floor(Math.random()*vocab.length)];const sc=v.w.split('').sort(()=>0.5-Math.random()).join('');a.innerHTML='<div style="background:#fff;border-radius:20px;padding:2rem;text-align:center;max-width:500px;margin:0 auto"><h3>🔄 מעורבבות</h3><div style="color:#64748b;margin-bottom:1rem">רמז: '+v.m+'</div><div style="font-size:2rem;font-family:monospace;letter-spacing:.5rem;font-weight:700;color:#6366f1;margin:1rem">'+sc+'</div><input class="exercise-input" id="sci" placeholder="הקלד את המילה..." style="text-align:center;font-size:1.3rem"><div style="margin-top:1rem"><button class="btn btn-primary" onclick="csc()">✅ בדוק</button><button class="btn btn-success" onclick="startScramble()">➡️ הבא</button></div><div id="scf"></div></div>';window.csc=function(){const i=document.getElementById('sci').value.trim().toLowerCase();const f=document.getElementById('scf');if(i===v.w.toLowerCase()){f.innerHTML='<div style="color:#10b981;font-weight:700;margin-top:1rem">✅ נכון!</div>';str++;tc++;ta++;upS();save()}else{f.innerHTML='<div style="color:#ef4444;font-weight:700;margin-top:1rem">❌ לא נכון</div>';str=0;upS()}}}
+
+function showS(s,m,t){const p=m>0?Math.round(s/m*100):0;document.getElementById('sv').textContent=p+'%';let e='😢',msg='המשך לתרגל!';if(p>=90){e='🏆';msg='מדהים! אלוף!'}else if(p>=70){e='🎉';msg='מעולה!'}else if(p>=50){e='👍';msg='טוב!'}document.getElementById('se').textContent=e;document.getElementById('sm').textContent=msg;document.getElementById('so').classList.add('show');document.getElementById('sp').classList.add('show')}
+function closeS(){document.getElementById('so').classList.remove('show');document.getElementById('sp').classList.remove('show')}
+function dash(){const d=JSON.parse(localStorage.getItem('emp')||'{}');document.getElementById('dv').textContent=d.v||0;document.getElementById('dg').textContent=d.g||0;document.getElementById('dp').textContent=d.p||0;document.getElementById('du').textContent=d.u||0;document.getElementById('dt').textContent=d.t||0}
+function save(){const t=new Date().toISOString().split('T')[0];localStorage.setItem('act_'+t,'1');const d=JSON.parse(localStorage.getItem('emp')||'{}');d.v=kw.size;d.g=(d.g||0)+1;d.p=(d.p||0)+1;d.t=tc;localStorage.setItem('emp',JSON.stringify(d));document.getElementById('pvocab').style.width=(kw.size/vocab.length*100)+'%';dash()}
+function load(){const d=JSON.parse(localStorage.getItem('emp')||'{}');if(d.v)kw=new Set(Array.from({length:d.v},(_,i)=>i));tc=d.t||0}
+function resetAll(){if(confirm('לאפס הכל?')){localStorage.clear();kw=new Set();tc=0;ta=0;str=0;upS();dash();location.reload()}}
+function startDaily(){initVQ()}
+window.onload=init;
+</script>
 </body>
 </html>'''
 
 with open('/mnt/agents/output/english_master.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
+    f.write(html_compact)
 
-print("File saved successfully!")
-print(f"File size: {len(html_content)} characters")
+print(f"Compact file saved! Size: {len(html_compact)} characters")
